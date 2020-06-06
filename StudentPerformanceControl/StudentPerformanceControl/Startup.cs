@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataCore;
 using Logger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,6 +33,7 @@ namespace StudentPerformanceControl
                 configuration.RootPath = "ClientApp";
             });
             services.AddLoggerService(Configuration);
+            services.AddRepository();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,7 +64,6 @@ namespace StudentPerformanceControl
                 {
                     spa.UseVueCli(npmScript: "serve");
                 }
-
             });
         }
     }

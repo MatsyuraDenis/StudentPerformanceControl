@@ -1,3 +1,4 @@
+using DataCore.EntityConfigurations;
 using DataCore.EntityModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,13 @@ namespace DataCore.Contexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Data Source=DESKTOP-7L0U503;Initial Catalog=StudentPerformanceControl;User ID=dbo;Trusted_Connection=True;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new GroupEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

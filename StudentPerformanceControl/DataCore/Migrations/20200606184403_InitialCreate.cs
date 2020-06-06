@@ -8,19 +8,6 @@ namespace DataCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Groups",
-                columns: table => new
-                {
-                    GroupId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Groups", x => x.GroupId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SubjectInfos",
                 columns: table => new
                 {
@@ -40,6 +27,7 @@ namespace DataCore.Migrations
                 {
                     TeacherId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecondName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -58,6 +46,26 @@ namespace DataCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tests", x => x.TestId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    GroupId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CuratorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.GroupId);
+                    table.ForeignKey(
+                        name: "FK_Groups_Teachers_CuratorId",
+                        column: x => x.CuratorId,
+                        principalTable: "Teachers",
+                        principalColumn: "TeacherId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,7 +119,7 @@ namespace DataCore.Migrations
                         column: x => x.TeacherId,
                         principalTable: "Teachers",
                         principalColumn: "TeacherId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,6 +243,12 @@ namespace DataCore.Migrations
                 name: "IX_Exams_SubjectId",
                 table: "Exams",
                 column: "SubjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Groups_CuratorId",
+                table: "Groups",
+                column: "CuratorId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Laboratories_ModuleId",

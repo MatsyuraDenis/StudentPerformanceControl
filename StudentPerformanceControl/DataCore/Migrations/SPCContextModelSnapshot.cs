@@ -43,10 +43,16 @@ namespace DataCore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CuratorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("GroupName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GroupId");
+
+                    b.HasIndex("CuratorId")
+                        .IsUnique();
 
                     b.ToTable("Groups");
                 });
@@ -220,6 +226,9 @@ namespace DataCore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("GroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -248,6 +257,15 @@ namespace DataCore.Migrations
                     b.HasOne("DataCore.EntityModels.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataCore.EntityModels.Group", b =>
+                {
+                    b.HasOne("DataCore.EntityModels.Teacher", "Curator")
+                        .WithOne("Group")
+                        .HasForeignKey("DataCore.EntityModels.Group", "CuratorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -325,7 +343,7 @@ namespace DataCore.Migrations
                     b.HasOne("DataCore.EntityModels.Teacher", "Teacher")
                         .WithMany("AssignedSubjects")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
