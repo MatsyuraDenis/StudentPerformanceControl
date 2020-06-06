@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Logger;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,15 +18,19 @@ namespace StudentPerformanceControl.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogService _logService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, ILogService logService)
         {
             _logger = logger;
+            _logService = logService;
         }
 
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            _logService.LogInfo("i am log");
+            _logger.LogInformation("hello");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
