@@ -11,5 +11,6 @@ namespace DataCore.EntityModels
 
         public Group Group { get; set; }
         public IList<Subject> AssignedSubjects { get; set; }
+        public IList<TeacherSubjectInfo> TeacherSubjectInfos { get; set; }
     }
 }
