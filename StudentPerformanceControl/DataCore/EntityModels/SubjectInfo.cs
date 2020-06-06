@@ -7,7 +7,5 @@ namespace DataCore.EntityModels
         public int SubjectInfoId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-
-        public IList<Teacher> ProfileTeachers { get; set; }
     }
 }
