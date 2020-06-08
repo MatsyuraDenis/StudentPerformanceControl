@@ -26,7 +26,7 @@ namespace StudentPerformanceControl.Controllers
         public WeatherForecastController(ILogService logService, IRepositoryFactory repositoryFactory)
         {
             _logService = logService;
-            _repository = repositoryFactory.GerMsSqlRepository();
+            _repository = repositoryFactory.GetMsSqlRepository();
         }
 
         [HttpGet]

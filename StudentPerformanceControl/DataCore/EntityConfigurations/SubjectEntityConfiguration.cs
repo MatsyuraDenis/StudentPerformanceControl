@@ -12,6 +12,11 @@ namespace DataCore.EntityConfigurations
                 .WithMany(teacher => teacher.AssignedSubjects)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(subject => subject.SubjectInfo)
+                .WithMany(info => info.Subjects)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

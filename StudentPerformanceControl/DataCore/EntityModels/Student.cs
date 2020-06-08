@@ -8,7 +8,7 @@ namespace DataCore.EntityModels
         public int GroupId { get; set; }
         public string Name { get; set; }
         public string SecondName { get; set; }
-
+        
         public Group Group { get; set; }
         public IList<StudentGrade> StudentGrades { get; set; }
     }

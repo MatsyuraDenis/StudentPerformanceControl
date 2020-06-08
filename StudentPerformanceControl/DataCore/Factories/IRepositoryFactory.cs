@@ -4,6 +4,6 @@ namespace DataCore.Factories
 {
     public interface IRepositoryFactory
     {
-        IRepository GerMsSqlRepository();
+        IRepository GetMsSqlRepository();
     }
 }

@@ -5,7 +5,7 @@ namespace DataCore.Factories.Impl
 {
     public class RepositoryFactory : IRepositoryFactory
     {
-        public IRepository GerMsSqlRepository()
+        public IRepository GetMsSqlRepository()
         {
             return new Repository.Impl.Repository(new SPCContext());
         }

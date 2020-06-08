@@ -27,6 +27,7 @@ namespace DataCore.Contexts
             modelBuilder.ApplyConfiguration(new GroupEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherSubjectInfoEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new ExamEntityConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

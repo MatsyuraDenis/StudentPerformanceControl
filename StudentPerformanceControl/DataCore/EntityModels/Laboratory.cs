@@ -10,6 +10,7 @@ namespace DataCore.EntityModels
         public string Title { get; set; }
         public string Description { get; set; }
         public string Task { get; set; }
+        public int MaxPoints { get; set; }
 
         public Module Module { get; set; }
         public Subject Subject { get; set; }
