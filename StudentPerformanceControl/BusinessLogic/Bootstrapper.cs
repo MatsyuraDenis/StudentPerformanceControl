@@ -14,6 +14,7 @@ namespace BusinessLogic
         {
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<ISubjectService, SubjectService>();
         }
     }
 }

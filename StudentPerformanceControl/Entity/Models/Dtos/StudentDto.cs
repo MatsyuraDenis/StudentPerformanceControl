@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entity.Models.Dtos.PerformanceInfos;
 
 namespace Entity.Models.Dtos
 {

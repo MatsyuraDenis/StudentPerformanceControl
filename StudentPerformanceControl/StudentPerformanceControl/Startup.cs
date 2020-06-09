@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using StudentPerformanceControl.Middlewares;
 using VueCliMiddleware;
 
 namespace StudentPerformanceControl
@@ -33,6 +34,15 @@ namespace StudentPerformanceControl
             {
                 configuration.RootPath = "ClientApp";
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Cors", builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyHeader();
+                    builder.AllowAnyMethod();
+                });
+            });
             services.AddLoggerService(Configuration);
             services.AddRepository();
             services.AddBusinessLogic(Configuration);
@@ -46,15 +56,18 @@ namespace StudentPerformanceControl
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("Cors");
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthorization();
+            
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
+            
             app.UseSpa(spa =>
             {
                 if (env.IsDevelopment())

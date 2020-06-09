@@ -1,17 +1,18 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <student-performance></student-performance>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import studentPerformance from "./components/contentPages/studentPerformance";
+  // eslint-disable-next-line no-unused-vars
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    studentPerformance
   }
 }
 </script>
@@ -23,6 +24,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
