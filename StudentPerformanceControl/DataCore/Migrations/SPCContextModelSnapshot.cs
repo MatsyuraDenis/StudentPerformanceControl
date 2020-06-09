@@ -19,24 +19,6 @@ namespace DataCore.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DataCore.EntityModels.Exam", b =>
-                {
-                    b.Property<int>("ExamId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExamId");
-
-                    b.HasIndex("SubjectId")
-                        .IsUnique();
-
-                    b.ToTable("Exams");
-                });
-
             modelBuilder.Entity("DataCore.EntityModels.Group", b =>
                 {
                     b.Property<int>("GroupId")
@@ -52,75 +34,27 @@ namespace DataCore.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.HasIndex("CuratorId")
-                        .IsUnique();
-
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("DataCore.EntityModels.Laboratory", b =>
+            modelBuilder.Entity("DataCore.EntityModels.HomeworkResult", b =>
                 {
-                    b.Property<int>("LaboratoryId")
+                    b.Property<int>("HomeworkResultId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaxPoints")
+                    b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<int>("ModuleId")
+                    b.Property<int>("StudentPerformanceId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
+                    b.HasKey("HomeworkResultId");
 
-                    b.Property<string>("Task")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("StudentPerformanceId");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LaboratoryId");
-
-                    b.HasIndex("ModuleId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.ToTable("Laboratories");
-                });
-
-            modelBuilder.Entity("DataCore.EntityModels.Module", b =>
-                {
-                    b.Property<int>("ModuleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TestId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ModuleId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("TestId");
-
-                    b.ToTable("Modules");
+                    b.ToTable("HomeworkResults");
                 });
 
             modelBuilder.Entity("DataCore.EntityModels.Student", b =>
@@ -146,36 +80,35 @@ namespace DataCore.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("DataCore.EntityModels.StudentGrade", b =>
+            modelBuilder.Entity("DataCore.EntityModels.StudentPerformance", b =>
                 {
-                    b.Property<int>("StudentGradeId")
+                    b.Property<int>("StudentPerformanceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ExamId")
+                    b.Property<int>("ExamPoints")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LaboratoryId")
+                    b.Property<int>("Module1TestPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Module2TestPoints")
                         .HasColumnType("int");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TestId")
+                    b.Property<int>("SubjectId")
                         .HasColumnType("int");
 
-                    b.HasKey("StudentGradeId");
-
-                    b.HasIndex("ExamId");
-
-                    b.HasIndex("LaboratoryId");
+                    b.HasKey("StudentPerformanceId");
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("TestId");
+                    b.HasIndex("SubjectId");
 
-                    b.ToTable("StudentGrades");
+                    b.ToTable("StudentPerformance");
                 });
 
             modelBuilder.Entity("DataCore.EntityModels.Subject", b =>
@@ -184,9 +117,6 @@ namespace DataCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ExmaId")
-                        .HasColumnType("int");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("int");
@@ -244,6 +174,10 @@ namespace DataCore.Migrations
 
                     b.HasKey("TeacherId");
 
+                    b.HasIndex("GroupId")
+                        .IsUnique()
+                        .HasFilter("[GroupId] IS NOT NULL");
+
                     b.ToTable("Teachers");
                 });
 
@@ -262,60 +196,11 @@ namespace DataCore.Migrations
                     b.ToTable("TeacherSubjectInfo");
                 });
 
-            modelBuilder.Entity("DataCore.EntityModels.Test", b =>
+            modelBuilder.Entity("DataCore.EntityModels.HomeworkResult", b =>
                 {
-                    b.Property<int>("TestId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.HasKey("TestId");
-
-                    b.ToTable("Tests");
-                });
-
-            modelBuilder.Entity("DataCore.EntityModels.Exam", b =>
-                {
-                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
-                        .WithOne("Exam")
-                        .HasForeignKey("DataCore.EntityModels.Exam", "SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DataCore.EntityModels.Group", b =>
-                {
-                    b.HasOne("DataCore.EntityModels.Teacher", "Curator")
-                        .WithOne("Group")
-                        .HasForeignKey("DataCore.EntityModels.Group", "CuratorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DataCore.EntityModels.Laboratory", b =>
-                {
-                    b.HasOne("DataCore.EntityModels.Module", "Module")
-                        .WithMany("Laboratories")
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("DataCore.EntityModels.Module", b =>
-                {
-                    b.HasOne("DataCore.EntityModels.Subject", null)
-                        .WithMany("Modules")
-                        .HasForeignKey("SubjectId");
-
-                    b.HasOne("DataCore.EntityModels.Test", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
+                    b.HasOne("DataCore.EntityModels.StudentPerformance", "StudentPerformance")
+                        .WithMany("HomeworkResults")
+                        .HasForeignKey("StudentPerformanceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -329,25 +214,19 @@ namespace DataCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataCore.EntityModels.StudentGrade", b =>
+            modelBuilder.Entity("DataCore.EntityModels.StudentPerformance", b =>
                 {
-                    b.HasOne("DataCore.EntityModels.Exam", "Exam")
-                        .WithMany("StudentGrades")
-                        .HasForeignKey("ExamId");
-
-                    b.HasOne("DataCore.EntityModels.Laboratory", "Laboratory")
-                        .WithMany("StudentGrades")
-                        .HasForeignKey("LaboratoryId");
-
-                    b.HasOne("DataCore.EntityModels.Student", null)
-                        .WithMany("StudentGrades")
+                    b.HasOne("DataCore.EntityModels.Student", "Student")
+                        .WithMany("StudentPerformances")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataCore.EntityModels.Test", "Test")
-                        .WithMany("StudentGrades")
-                        .HasForeignKey("TestId");
+                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
+                        .WithMany("StudentPerformances")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DataCore.EntityModels.Subject", b =>
@@ -355,7 +234,7 @@ namespace DataCore.Migrations
                     b.HasOne("DataCore.EntityModels.Group", "Group")
                         .WithMany("Subjects")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("DataCore.EntityModels.SubjectInfo", "SubjectInfo")
@@ -369,6 +248,13 @@ namespace DataCore.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DataCore.EntityModels.Teacher", b =>
+                {
+                    b.HasOne("DataCore.EntityModels.Group", "Group")
+                        .WithOne("Curator")
+                        .HasForeignKey("DataCore.EntityModels.Teacher", "GroupId");
                 });
 
             modelBuilder.Entity("DataCore.EntityModels.TeacherSubjectInfo", b =>

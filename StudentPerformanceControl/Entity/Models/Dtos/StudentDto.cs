@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Entity.Models.Dtos
 {
     public class StudentDto

@@ -10,6 +10,6 @@ namespace DataCore.EntityModels
         public string SecondName { get; set; }
         
         public Group Group { get; set; }
-        public IList<StudentGrade> StudentGrades { get; set; }
+        public IList<StudentPerformance> StudentPerformances { get; set; }
     }
 }

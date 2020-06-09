@@ -17,6 +17,15 @@ namespace DataCore.EntityConfigurations
                 .WithMany(info => info.Subjects)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+            
+            builder.HasOne(subject => subject.Group)
+                .WithMany(group => group.Subjects)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasMany(subject => subject.StudentPerformances)
+                .WithOne(performance => performance.Subject)
+                .HasForeignKey(performance => performance.SubjectId);
         }
     }
 }
