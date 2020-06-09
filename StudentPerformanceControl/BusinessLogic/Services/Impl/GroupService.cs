@@ -5,6 +5,7 @@ using DataCore.EntityModels;
 using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos;
+using Logger;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic.Services.Impl
@@ -14,13 +15,15 @@ namespace BusinessLogic.Services.Impl
         #region Dependencies
 
         private readonly IRepository _repository;
+        private readonly ILogService _logService;
 
         #endregion
 
         #region ctor
 
-        public GroupService(IRepositoryFactory repositoryFactory)
+        public GroupService(IRepositoryFactory repositoryFactory, ILogService logService)
         {
+            _logService = logService;
             _repository = repositoryFactory.GetMsSqlRepository();
         }
 
@@ -30,8 +33,16 @@ namespace BusinessLogic.Services.Impl
         
         public async Task<IList<GroupDto>> GetGroupsAsync()
         {
-            return await GroupQuery()
+            _logService.LogInfo("Start loading groups");
+            
+            var groups = await GroupQuery()
                 .ToListAsync();
+            
+            
+            
+            _logService.LogInfo("Groups was loaded succesfull!");
+            
+            return groups;
         }
 
         public async Task<GroupDto> GetGroupAsync(int groupId)

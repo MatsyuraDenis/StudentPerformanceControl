@@ -7,12 +7,14 @@ namespace DataCore.EntityModels
     {
         public int SubjectId { get; set; }
         public int TeacherId { get; set; }
+        public int? SubjectSettingId { get; set; }
         public int GroupId { get; set; }
         public int SubjectInfoId { get; set; }
         
         public Teacher Teacher { get; set; }
         public Group Group { get; set; }
         public SubjectInfo SubjectInfo { get; set; }
+        public SubjectSetting SubjectSetting { get; set; }
         public IList<StudentPerformance> StudentPerformances { get; set; }
     }
 }

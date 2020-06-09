@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataCore.Migrations
 {
     [DbContext(typeof(SPCContext))]
-    [Migration("20200609105531_Initial")]
+    [Migration("20200609115848_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,10 +46,13 @@ namespace DataCore.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("MaxPoints")
+                        .HasColumnType("int");
+
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("SubjectSettingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -57,7 +60,7 @@ namespace DataCore.Migrations
 
                     b.HasKey("HomeworkInfoId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("SubjectSettingId");
 
                     b.ToTable("HomeworkInfo");
                 });
@@ -152,6 +155,9 @@ namespace DataCore.Migrations
                     b.Property<int>("SubjectInfoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SubjectSettingId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
@@ -182,6 +188,33 @@ namespace DataCore.Migrations
                     b.HasKey("SubjectInfoId");
 
                     b.ToTable("SubjectInfos");
+                });
+
+            modelBuilder.Entity("DataCore.EntityModels.SubjectSetting", b =>
+                {
+                    b.Property<int>("SubjectSettingId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ExamMaxPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Module1TestMaxPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Module2TestMaxPoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SubjectSettingId");
+
+                    b.HasIndex("SubjectId")
+                        .IsUnique();
+
+                    b.ToTable("SubjectSetting");
                 });
 
             modelBuilder.Entity("DataCore.EntityModels.Teacher", b =>
@@ -226,9 +259,9 @@ namespace DataCore.Migrations
 
             modelBuilder.Entity("DataCore.EntityModels.HomeworkInfo", b =>
                 {
-                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
+                    b.HasOne("DataCore.EntityModels.SubjectSetting", "SubjectSetting")
+                        .WithMany("HomeworkInfos")
+                        .HasForeignKey("SubjectSettingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -284,6 +317,15 @@ namespace DataCore.Migrations
                         .WithMany("AssignedSubjects")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataCore.EntityModels.SubjectSetting", b =>
+                {
+                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
+                        .WithOne("SubjectSetting")
+                        .HasForeignKey("DataCore.EntityModels.SubjectSetting", "SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

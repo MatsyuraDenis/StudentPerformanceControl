@@ -83,6 +83,7 @@ namespace DataCore.Migrations
                     SubjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TeacherId = table.Column<int>(type: "int", nullable: false),
+                    SubjectSettingId = table.Column<int>(type: "int", nullable: true),
                     GroupId = table.Column<int>(type: "int", nullable: false),
                     SubjectInfoId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -134,27 +135,6 @@ namespace DataCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HomeworkInfo",
-                columns: table => new
-                {
-                    HomeworkInfoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SubjectId = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HomeworkInfo", x => x.HomeworkInfoId);
-                    table.ForeignKey(
-                        name: "FK_HomeworkInfo_Subjects_SubjectId",
-                        column: x => x.SubjectId,
-                        principalTable: "Subjects",
-                        principalColumn: "SubjectId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "StudentPerformance",
                 columns: table => new
                 {
@@ -184,6 +164,28 @@ namespace DataCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SubjectSetting",
+                columns: table => new
+                {
+                    SubjectSettingId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    Module1TestMaxPoints = table.Column<int>(type: "int", nullable: false),
+                    Module2TestMaxPoints = table.Column<int>(type: "int", nullable: false),
+                    ExamMaxPoints = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubjectSetting", x => x.SubjectSettingId);
+                    table.ForeignKey(
+                        name: "FK_SubjectSetting_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "SubjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HomeworkResults",
                 columns: table => new
                 {
@@ -204,10 +206,32 @@ namespace DataCore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "HomeworkInfo",
+                columns: table => new
+                {
+                    HomeworkInfoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubjectSettingId = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaxPoints = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeworkInfo", x => x.HomeworkInfoId);
+                    table.ForeignKey(
+                        name: "FK_HomeworkInfo_SubjectSetting_SubjectSettingId",
+                        column: x => x.SubjectSettingId,
+                        principalTable: "SubjectSetting",
+                        principalColumn: "SubjectSettingId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_HomeworkInfo_SubjectId",
+                name: "IX_HomeworkInfo_SubjectSettingId",
                 table: "HomeworkInfo",
-                column: "SubjectId");
+                column: "SubjectSettingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HomeworkResults_StudentPerformanceId",
@@ -245,6 +269,12 @@ namespace DataCore.Migrations
                 column: "TeacherId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubjectSetting_SubjectId",
+                table: "SubjectSetting",
+                column: "SubjectId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Teachers_GroupId",
                 table: "Teachers",
                 column: "GroupId",
@@ -267,6 +297,9 @@ namespace DataCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "TeacherSubjectInfo");
+
+            migrationBuilder.DropTable(
+                name: "SubjectSetting");
 
             migrationBuilder.DropTable(
                 name: "StudentPerformance");

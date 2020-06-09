@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLogic;
 using DataCore;
 using Logger;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ namespace StudentPerformanceControl
             });
             services.AddLoggerService(Configuration);
             services.AddRepository();
+            services.AddBusinessLogic(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

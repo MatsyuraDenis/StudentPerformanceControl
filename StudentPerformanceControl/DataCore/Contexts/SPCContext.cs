@@ -17,7 +17,7 @@ namespace DataCore.Contexts
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=DESKTOP-7L0U503;Initial Catalog=StudentPerformanceControl;User ID=dbo;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Data Source=DESKTOP-7L0U503;Initial Catalog=SPC;User ID=dbo;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,6 +30,7 @@ namespace DataCore.Contexts
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherSubjectInfoEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SubjectSettingEntityConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }
