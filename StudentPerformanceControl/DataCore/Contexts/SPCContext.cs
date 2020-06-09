@@ -23,9 +23,13 @@ namespace DataCore.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new GroupEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new HomeworkResultEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new HomeworkInfoEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new StudentEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new StudentPerformanceEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new TeacherSubjectInfoEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TeacherEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TeacherSubjectInfoEntityConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

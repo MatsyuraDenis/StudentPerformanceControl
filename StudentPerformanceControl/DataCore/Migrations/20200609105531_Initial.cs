@@ -2,7 +2,7 @@
 
 namespace DataCore.Migrations
 {
-    public partial class Initial_commit : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -134,6 +134,27 @@ namespace DataCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HomeworkInfo",
+                columns: table => new
+                {
+                    HomeworkInfoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SubjectId = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeworkInfo", x => x.HomeworkInfoId);
+                    table.ForeignKey(
+                        name: "FK_HomeworkInfo_Subjects_SubjectId",
+                        column: x => x.SubjectId,
+                        principalTable: "Subjects",
+                        principalColumn: "SubjectId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "StudentPerformance",
                 columns: table => new
                 {
@@ -168,6 +189,7 @@ namespace DataCore.Migrations
                 {
                     HomeworkResultId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    HomeworkInfoId = table.Column<int>(type: "int", nullable: false),
                     StudentPerformanceId = table.Column<int>(type: "int", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false)
                 },
@@ -181,6 +203,11 @@ namespace DataCore.Migrations
                         principalColumn: "StudentPerformanceId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeworkInfo_SubjectId",
+                table: "HomeworkInfo",
+                column: "SubjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HomeworkResults_StudentPerformanceId",
@@ -232,6 +259,9 @@ namespace DataCore.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "HomeworkInfo");
+
             migrationBuilder.DropTable(
                 name: "HomeworkResults");
 

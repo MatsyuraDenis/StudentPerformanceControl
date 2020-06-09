@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataCore.Migrations
 {
     [DbContext(typeof(SPCContext))]
-    [Migration("20200609102332_Initial_commit")]
-    partial class Initial_commit
+    [Migration("20200609105531_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,12 +39,38 @@ namespace DataCore.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("DataCore.EntityModels.HomeworkInfo", b =>
+                {
+                    b.Property<int>("HomeworkInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HomeworkInfoId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("HomeworkInfo");
+                });
+
             modelBuilder.Entity("DataCore.EntityModels.HomeworkResult", b =>
                 {
                     b.Property<int>("HomeworkResultId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("HomeworkInfoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
@@ -196,6 +222,15 @@ namespace DataCore.Migrations
                     b.HasIndex("SubjectInfoId");
 
                     b.ToTable("TeacherSubjectInfo");
+                });
+
+            modelBuilder.Entity("DataCore.EntityModels.HomeworkInfo", b =>
+                {
+                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DataCore.EntityModels.HomeworkResult", b =>
