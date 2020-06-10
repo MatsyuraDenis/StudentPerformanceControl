@@ -15,13 +15,11 @@ namespace Client.Controllers
     public class GroupController : Controller
     {
         private readonly IGroupService _groupService;
-        private readonly ITeacherService _teacherService;
         private readonly ISubjectService _subjectService;
 
-        public GroupController(IGroupService groupService, ITeacherService teacherService, ISubjectService subjectService)
+        public GroupController(IGroupService groupService, ISubjectService subjectService)
         {
             _groupService = groupService;
-            _teacherService = teacherService;
             _subjectService = subjectService;
         }
 
@@ -42,8 +40,6 @@ namespace Client.Controllers
         // GET: Group/Create
         public async Task<ActionResult> Create()
         {
-            var teachers = await _teacherService.GetPossibleCuratorAsync();
-            ViewBag.PossibleCurators = new SelectList(teachers, "Id", "Fullname");
             ViewBag.Subjects = await _subjectService.GetSubjectInfosAsync();
             return View();
         }

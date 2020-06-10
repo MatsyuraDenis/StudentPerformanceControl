@@ -6,7 +6,6 @@
 }
 
 <h1 class="align-content-center m-5">@Model.Title group</h1>
-<h3 class="align-content-center m-5">Curator @Model.Teacher</h3>
 
 
 <div class="m-5">
@@ -16,7 +15,6 @@
             <tr>
                 <th>Number</th>
                 <th>Title</th>
-                <th>Teacher</th>
             </tr>
             </thead>
             <tbody>
@@ -25,7 +23,6 @@
                     <tr>
                         <td>@subjectIndex</td>
                         <td>@subject.SubjectName</td>
-                        <td>@(subject.TeacherSecondName + " " + subject.TeacherName)</td>
                     </tr>
                     subjectIndex++;
                 }

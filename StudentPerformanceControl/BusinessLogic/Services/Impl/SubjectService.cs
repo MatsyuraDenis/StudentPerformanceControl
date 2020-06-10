@@ -5,11 +5,8 @@ using DataCore.EntityModels;
 using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
-using Entity.Models.Dtos;
-using Entity.Models.Dtos.InfoDtos;
 using Entity.Models.Dtos.PerformanceInfos;
 using Entity.Models.Dtos.Subject;
-using Entity.Models.Dtos.Teacher;
 using Logger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -46,8 +43,6 @@ namespace BusinessLogic.Services.Impl
                 .Select(subject => new SubjectPerformanceInfoDto
                 {
                     SubjectId = subject.SubjectId,
-                    TeacherName = subject.Teacher.Name,
-                    TeacherSecondName = subject.Teacher.SecondName,
                     SubjectSettings = new SubjectSettingDto
                     {
                         SubjectSettingId = subject.SubjectSetting.SubjectSettingId,
@@ -90,7 +85,6 @@ namespace BusinessLogic.Services.Impl
             var subject = new Subject
             {
                 GroupId = subjectDto.GroupId,
-                TeacherId = subjectDto.TeacherId,
                 SubjectInfoId = subjectDto.SubjectInfoId,
                 SubjectSetting = new SubjectSetting
                 {
@@ -141,12 +135,7 @@ namespace BusinessLogic.Services.Impl
                 .Select(info => new SubjectInfoDetailsDto
                 {
                     Id = info.SubjectInfoId,
-                    Title = info.Title,
-                    Teachers = info.TeacherSubjectInfos.Select(subjectInfo => new TeacherDto
-                    {
-                        Id = subjectInfo.Teacher.TeacherId,
-                        Fullname = subjectInfo.Teacher.SecondName + " " + subjectInfo.Teacher.Name
-                    })
+                    Title = info.Title
                 })
                 .ToListAsync();
         }

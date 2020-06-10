@@ -11,7 +11,6 @@
         <tr>
             <th>Number</th>
             <th>Group</th>
-            <th>Teaher</th>
             <th>Details</th>
             <th>Edit</th>
         </tr>
@@ -22,7 +21,6 @@
             <tr>
                 <td> @index </td>
                 <td> @group.Title </td>
-                <td> @group.Teacher </td>
                 <td> <a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a></td>
                 <td> <a asp-controller="Group" asp-action="Edit" asp-route-id="@group.Id">Edit</a></td>
             </tr>

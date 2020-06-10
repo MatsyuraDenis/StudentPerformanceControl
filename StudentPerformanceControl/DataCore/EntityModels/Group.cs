@@ -7,7 +7,7 @@ namespace DataCore.EntityModels
         public int GroupId { get; set; }
         public string GroupName { get; set; }
         public int CuratorId { get; set; }
-        public int? GroupTypeId { get; set; }
+        public int GroupTypeId { get; set; }
         
         public Teacher Curator { get; set; }
         public GroupType GroupType { get; set; }
