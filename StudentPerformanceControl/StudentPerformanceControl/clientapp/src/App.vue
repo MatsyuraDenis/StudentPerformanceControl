@@ -1,28 +1,42 @@
 <template>
   <div id="app">
-    <student-performance></student-performance>
+    <nav-bar></nav-bar>
+    <content-page></content-page>
   </div>
 </template>
 
 <script>
-import studentPerformance from "./components/contentPages/studentPerformance";
-  // eslint-disable-next-line no-unused-vars
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import navBar from "@/views/navBar";
+import contentPage from "@/views/contentPage";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    studentPerformance
+    navBar,
+    contentPage
   }
-}
+};
 </script>
 
-<style>
+<style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
 </style>
