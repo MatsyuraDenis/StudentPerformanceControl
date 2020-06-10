@@ -16,11 +16,13 @@ namespace Client.Controllers
     {
         private readonly IGroupService _groupService;
         private readonly ITeacherService _teacherService;
+        private readonly ISubjectService _subjectService;
 
-        public GroupController(IGroupService groupService, ITeacherService teacherService)
+        public GroupController(IGroupService groupService, ITeacherService teacherService, ISubjectService subjectService)
         {
             _groupService = groupService;
             _teacherService = teacherService;
+            _subjectService = subjectService;
         }
 
         // GET: Group
@@ -41,7 +43,8 @@ namespace Client.Controllers
         public async Task<ActionResult> Create()
         {
             var teachers = await _teacherService.GetPossibleCuratorAsync();
-            ViewBag.PossibleCurators = new SelectList(teachers, "Id", "Fullname") ;
+            ViewBag.PossibleCurators = new SelectList(teachers, "Id", "Fullname");
+            ViewBag.Subjects = await _subjectService.GetSubjectInfosAsync();
             return View();
         }
 
@@ -80,29 +83,6 @@ namespace Client.Controllers
             try
             {
                 // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Group/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Group/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
 
                 return RedirectToAction(nameof(Index));
             }

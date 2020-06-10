@@ -28,6 +28,7 @@ namespace BusinessLogic.Services.Impl
                     Id = teacher.TeacherId,
                     Fullname = teacher.SecondName + " " + teacher.Name
                 })
+                .OrderBy(curator => curator.Fullname)
                 .ToListAsync();
         }
 

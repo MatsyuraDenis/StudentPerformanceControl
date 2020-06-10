@@ -43,8 +43,9 @@ namespace BusinessLogic.Services.Impl
                 {
                     Id = group.GroupId,
                     Title = group.GroupName,
-                    Teacher = group.Curator.SecondName + group.Curator.Name
-                    })
+                    Teacher = group.Curator.SecondName + " " + group.Curator.Name
+                })
+                .OrderBy(group => group.Title)
                 .ToListAsync();
             
             _logService.LogInfo("Groups was loaded succesfull!");
@@ -97,6 +98,7 @@ namespace BusinessLogic.Services.Impl
                 {
                     Id = group.GroupId,
                     Title = group.GroupName,
+                    Teacher = group.Curator.SecondName + " " + group.Curator.Name,
                     Subjects = group.Subjects.Select(subject => new SubjectDto
                     {
                         Id = subject.SubjectId,
@@ -104,13 +106,13 @@ namespace BusinessLogic.Services.Impl
                         TeacherName = subject.Teacher.Name,
                         TeacherSecondName = subject.Teacher.SecondName,
                         TeacherId = subject.TeacherId,
-                    }),
+                    }).OrderBy(subject => subject.SubjectName),
                     Students = group.Students.Select(student => new StudentDto
                     {
                         Id = student.StudentId,
                         Name = student.Name,
                         SecondName = student.SecondName
-                    })
+                    }).OrderBy(student => student.SecondName)
                 });
         }
 
