@@ -1,0 +1,8 @@
+﻿@model Entity.Models.Dtos.ErrorDto
+@{
+    ViewData["Title"] = "ErrorView";
+}
+<h1 class="text-danger">Error</h1>
+<div>Status code @Model.StatusCode</div>
+<div>@Model.Message</div>
+

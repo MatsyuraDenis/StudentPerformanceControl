@@ -2,9 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataCore.EntityModels;
+using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos;
+using Entity.Models.Dtos.Group;
+using Entity.Models.Enums;
 using Logger;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,10 +38,14 @@ namespace BusinessLogic.Services.Impl
         {
             _logService.LogInfo("Start loading groups");
             
-            var groups = await GroupQuery()
+            var groups = await _repository.GetAll<Group>()
+                .Select(group => new GroupDto
+                {
+                    Id = group.GroupId,
+                    Title = group.GroupName,
+                    Teacher = group.Curator.SecondName + group.Curator.Name
+                    })
                 .ToListAsync();
-            
-            
             
             _logService.LogInfo("Groups was loaded succesfull!");
             
@@ -50,7 +57,35 @@ namespace BusinessLogic.Services.Impl
             return await GroupQuery()
                 .SingleOrDefaultAsync(group => group.Id == groupId);
         }
-        
+
+        public async Task<int> AddGroup(AddGroupDto group)
+        {
+            var dbTeacher = await _repository.GetAll<Teacher>()
+                .SingleOrDefaultAsync(teacher => teacher.TeacherId == group.TeacherId);
+
+            if (dbTeacher.GroupId != null)
+            {
+                throw new SPCException($"Teacher {group.TeacherId} is curator for {dbTeacher.GroupId} group. Please select another teacher", 400);
+            }
+
+            var newGroup = new Group
+            {
+                CuratorId = group.TeacherId,
+                GroupName = group.GroupName,
+                GroupTypeId = (int) GroupTypes.Created
+            };
+            
+            _repository.Add(newGroup);
+            await _repository.SaveContextAsync();
+
+            dbTeacher.GroupId = newGroup.GroupId;
+            
+            _repository.Update(dbTeacher);
+            await _repository.SaveContextAsync();
+            
+            return newGroup.GroupId;
+        }
+
         #endregion
 
         #region Private Methods
@@ -61,6 +96,7 @@ namespace BusinessLogic.Services.Impl
                 .Select(group => new GroupDto
                 {
                     Id = group.GroupId,
+                    Title = group.GroupName,
                     Subjects = group.Subjects.Select(subject => new SubjectDto
                     {
                         Id = subject.SubjectId,

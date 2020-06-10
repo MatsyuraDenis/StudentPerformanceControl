@@ -7,7 +7,7 @@ namespace Logger
 {
     public static class Bootstrapper
     {
-        public static IServiceCollection AddLoggerService(this IServiceCollection services, IConfiguration config) 
+        public static IServiceCollection AddLoggerService(this IServiceCollection services) 
         {
             services.AddLogging(loggingBuilder => ConfigureExtensions.AddNLog(loggingBuilder, "nlog.config"));
             services.AddSingleton<ILogService, NLogService>();

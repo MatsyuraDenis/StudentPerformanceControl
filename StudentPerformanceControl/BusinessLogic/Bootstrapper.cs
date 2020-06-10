@@ -10,11 +10,12 @@ namespace BusinessLogic
 {
     public static class Bootstrapper
     {
-        public static void AddBusinessLogic(this IServiceCollection services, IConfiguration configuration)
+        public static void AddBusinessLogic(this IServiceCollection services)
         {
             services.AddTransient<IStudentService, StudentService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddTransient<ISubjectService, SubjectService>();
+            services.AddTransient<ITeacherService, TeacherService>();
         }
     }
 }

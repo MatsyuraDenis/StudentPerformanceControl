@@ -1,0 +1,21 @@
+﻿@model Entity.Models.Dtos.Group.AddGroupDto
+@{
+    ViewData["Title"] = "Create";
+}
+<h1>Create group</h1>
+<div class="container">
+    <form asp-action="Create" asp-controller="Group" asp-antiforgery="true">
+        <div>
+            <label asp-for="TeacherId"></label>
+            <select asp-for="TeacherId" asp-items="ViewBag.PossibleCurators"></select>
+        </div>
+        <div>
+            <label asp-for="GroupName"></label>
+            <input asp-for="GroupName"/>
+        </div>
+        <div>
+            <input type="submit" value="Save">
+        </div>
+        </form>
+</div>
+

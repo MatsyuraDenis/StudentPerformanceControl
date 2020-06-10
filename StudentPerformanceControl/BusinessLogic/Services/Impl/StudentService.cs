@@ -5,6 +5,7 @@ using DataCore.EntityModels;
 using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
+using Entity.Models.Dtos;
 using Entity.Models.Dtos.PerformanceInfos;
 using Entity.Models.Dtos.StudentPerformance;
 using Logger;
@@ -75,6 +76,18 @@ namespace BusinessLogic.Services.Impl
             _logService.LogInfo($"Load academic performance for student with id {studentId} completed!");
             
             return studentInfo;
+        }
+
+        public async Task AddStudentAsync(StudentDto studentDto)
+        {
+            _repository.Add(new Student
+            {
+                Name = studentDto.Name,
+                SecondName = studentDto.SecondName,
+                GroupId = studentDto.GroupId
+            });
+
+            await _repository.SaveContextAsync();
         }
 
         #endregion

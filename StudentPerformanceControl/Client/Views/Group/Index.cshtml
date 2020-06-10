@@ -1,0 +1,32 @@
+﻿@model IList<Entity.Models.Dtos.GroupDto>
+
+@{
+    ViewData["Title"] = "Index";
+    var index = 1;
+}
+
+<div class="container">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Number</th>
+            <th>Group</th>
+            <th>Teaher</th>
+            <th>Details</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            @foreach (var group in Model)
+            {
+                <td> @index </td>
+                <td> @group.Title </td>
+                <td> @group.Teacher </td>
+                <td> <a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a></td>
+            }
+        </tr>
+        </tbody>
+    </table>
+    <a asp-controller="Group" asp-action="Create" class="btn btn-primary">Create new group</a>
+</div>
+
