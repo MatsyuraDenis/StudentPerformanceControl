@@ -10,5 +10,6 @@ namespace BusinessLogic.Services
     {
         Task<StudentPerformanceDetailsDto> GetStudentPerformanceAsync(int studentId);
         Task AddStudentAsync(StudentDto studentDto);
+        Task RemoveStudentAsync(int studentId);
     }
 }

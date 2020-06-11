@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
 }
 
-<<div>
+<div>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -15,7 +15,6 @@
             <th>Module 1</th>
             <th>Module 2</th>
             <th>Exam</th>
-            <th>Edit</th>
         </tr>
         </thead>
         <tbody>
@@ -25,12 +24,11 @@
                 <td>@(performance.StudentSecondName + " " + performance.StudentName)</td>
                 @foreach (var homework in performance.Homeworks)
                 {
-                    <td>@homework.Points</td>
+                    <td><a> @homework.Points </a></td>
                 }
                 <td>@performance.Module1Result</td>
                 <td>@performance.Module2Result</td>
                 <td>@performance.ExamResult</td>
-                <td><a>Edit</a></td>
             </tr>
         }
         </tbody>

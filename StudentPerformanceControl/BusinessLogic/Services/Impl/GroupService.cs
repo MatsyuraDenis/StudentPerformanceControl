@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataCore.EntityModels;
+using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos;
@@ -38,7 +39,7 @@ namespace BusinessLogic.Services.Impl
             _logService.LogInfo("Start loading groups");
             
             var groups = await _repository.GetAll<Group>()
-                .Where(group => group.GroupTypeId != (int) GroupTypes.Former)
+                .Where(group => group.GroupTypeId == (int) GroupTypes.Active)
                 .Select(group => new GroupDto
                 {
                     Id = group.GroupId,
@@ -70,6 +71,18 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
             
             return newGroup.GroupId;
+        }
+
+        public async Task SaveAsync(int groupId)
+        {
+            var dbGroup = await _repository.GetAll<Group>()
+                .SingleOrDefaultAsync(g => g.GroupId == groupId);
+
+            dbGroup.GroupTypeId = (int) GroupTypes.Active;
+
+            _repository.Update(dbGroup);
+            
+            await _repository.SaveContextAsync();
         }
 
         public async Task DeactivateGroupAsync(int groupId)

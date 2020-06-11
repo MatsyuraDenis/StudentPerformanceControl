@@ -111,6 +111,12 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task RemoveStudentAsync(int studentId)
+        {
+            var dbStudent = await _repository.GetAll<Student>()
+                .SingleOrDefaultAsync(student => student.StudentId == studentId);
+        }
+
         #endregion
     }
 }

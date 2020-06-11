@@ -14,8 +14,14 @@ namespace Client.Controllers
 {
     public class GroupController : Controller
     {
+        #region MyRegion
+
         private readonly IGroupService _groupService;
         private readonly ISubjectService _subjectService;
+
+        #endregion
+
+        #region ctor
 
         public GroupController(IGroupService groupService, ISubjectService subjectService)
         {
@@ -23,6 +29,10 @@ namespace Client.Controllers
             _subjectService = subjectService;
         }
 
+        #endregion
+
+        #region Methods
+        
         // GET: Group
         public async Task<ActionResult> Index()
         {
@@ -43,6 +53,14 @@ namespace Client.Controllers
             ViewBag.Subjects = await _subjectService.GetSubjectInfosAsync();
             return View();
         }
+        
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> Save(int groupId)
+        {
+            await _groupService.SaveAsync(groupId);
+
+            return RedirectToAction("Index");
+        }
 
         // POST: Group/Create
         [HttpPost]
@@ -54,7 +72,7 @@ namespace Client.Controllers
                 var newGroupId = await _groupService.AddGroupAsync(groupDto);
                 var newGroup = await _groupService.GetGroupAsync(newGroupId);
 
-                return RedirectToAction("EditFromTemplate", new { groupDto = newGroup } );
+                return RedirectToAction("Edit", new { groupId = newGroup.Id } );
             }
             catch (SPCException ex)
             {
@@ -65,12 +83,6 @@ namespace Client.Controllers
                 return View("Error");
             }
         }
-
-        // GET: Group/Edit/5
-        public ActionResult EditFromTemplate(GroupDto groupDto)
-        {
-            return View("Edit", groupDto);
-        }
         
         public async Task<ActionResult> Edit(int groupId)
         {
@@ -78,23 +90,6 @@ namespace Client.Controllers
             return View(group);
         }
 
-        // POST: Group/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-        
         public async Task<ActionResult> Deactivate(int id)
         {
             try
@@ -107,5 +102,7 @@ namespace Client.Controllers
                 return View("Error");
             }
         }
+        
+        #endregion
     }
 }

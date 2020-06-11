@@ -98,18 +98,25 @@ namespace BusinessLogic.Services.Impl
             var subject = new Subject
             {
                 GroupId = subjectDto.GroupId,
-                SubjectInfoId = subjectDto.SubjectInfoId,
-                SubjectSetting = new SubjectSetting
-                {
-                    Module1TestMaxPoints = subjectDto.Module1MaxPoints,
-                    Module2TestMaxPoints = subjectDto.Module2MaxPoints,
-                    ExamMaxPoints = subjectDto.ExamMaxPoints
-                }
+                SubjectInfoId = subjectDto.SubjectInfoId
             };
             
             _repository.Add(subject);
 
             await _repository.SaveContextAsync();
+
+            var subjectSettings = new SubjectSetting
+            {
+                Module1TestMaxPoints = subjectDto.Module1MaxPoints,
+                Module2TestMaxPoints = subjectDto.Module2MaxPoints,
+                ExamMaxPoints = subjectDto.ExamMaxPoints,
+                SubjectId = subject.SubjectId
+            };
+            
+            _repository.Add(subjectSettings);
+            
+            await _repository.SaveContextAsync();
+
             
             var studentIds = await _repository.GetAll<Student>()
                 .Where(student => student.GroupId == subjectDto.GroupId)
@@ -145,6 +152,21 @@ namespace BusinessLogic.Services.Impl
         public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync()
         {
             return await _repository.GetAll<SubjectInfo>()
+                .Select(info => new SubjectInfoDto
+                {
+                    Id = info.SubjectInfoId,
+                    Title = info.Title,
+                    GroupUsed = _repository.GetAll<Group>()
+                        .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId))
+                        .Count()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync(int groupId)
+        {
+            return await _repository.GetAll<SubjectInfo>()
+                .Where(info => info.Subjects.All(subject => subject.GroupId != groupId))
                 .Select(info => new SubjectInfoDto
                 {
                     Id = info.SubjectInfoId,

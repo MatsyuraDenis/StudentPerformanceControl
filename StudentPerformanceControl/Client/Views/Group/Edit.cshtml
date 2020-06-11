@@ -8,10 +8,8 @@
 
 <h1>@Model.Title</h1>
 
-<a class="btn btn-primary" asp-action="Create" asp-controller="Subject">Add subject</a>
 <div class="m-1">
     <h3 class="m-1"> Subject </h3>
-    <a class="btn btn-primary" asp-action="Create" asp-controller="Subject" asp-route-group-id="@Model.Id"></a>
         <table class="table table-striped">
             <thead class="thead-dark">
             <tr>
@@ -19,6 +17,7 @@
                 <th>Title</th>
                 <th>Delete</th>
             </tr>
+            <tr><a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Subject" asp-route-groupId="@Model.Id">Add subject</a></tr>
             </thead>
             <tbody>
                 @foreach (var subject in Model.Subjects)
@@ -34,7 +33,6 @@
         </table>
 </div>
 
-<a class="btn btn-primary" asp-action="Create" asp-controller="Student" asp-route-group-id="@Model.Id">Add student</a>
 <div>
     <h3 class="m-1"> Students </h3>
     <table class="table table-striped">
@@ -44,6 +42,7 @@
             <th>SecondName</th>
             <th>Name</th>
         </tr>
+        <tr><td><a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Student" asp-route-groupId="@Model.Id">Add student</a></td></tr>
         </thead>
         <tbody>
         @foreach (var student in Model.Students)
@@ -58,4 +57,6 @@
         </tbody>
     </table>
 </div>
+
+<a class="btn btn-primary" asp-action="Save" asp-controller="Group" asp-route-groupId="@Model.Id">Submit</a>
 

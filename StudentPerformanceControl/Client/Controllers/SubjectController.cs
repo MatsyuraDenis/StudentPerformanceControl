@@ -8,17 +8,28 @@ using Entity.Models.Dtos;
 using Entity.Models.Dtos.Subject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Client.Controllers
 {
     public class SubjectController : Controller
     {
+        #region MyRegion
+
         private readonly ISubjectService _subjectService;
+
+        #endregion
+
+        #region ctor
 
         public SubjectController(ISubjectService subjectService)
         {
             _subjectService = subjectService;
         }
+
+        #endregion
+
+        #region Methods
 
         // GET: Subject
         public async Task<ActionResult> Index()
@@ -35,12 +46,15 @@ namespace Client.Controllers
         }
 
         // GET: Subject/Create
-        public ActionResult Create(int groupId)
+        public async Task<ActionResult> Create(int groupId)
         {
             var subject = new NewSubjectDto
             {
                 GroupId = groupId
             };
+
+            var subjects = await _subjectService.GetSubjectInfosAsync(groupId);
+            ViewBag.Subjects = new SelectList(subjects, "Id", "Title");
             return View(subject);
         }
 
@@ -55,16 +69,16 @@ namespace Client.Controllers
 
                 return RedirectToAction("Edit", "Group", new {groupId = subject.GroupId});
             }
-            catch
+            catch(Exception ex)
             {
-                return View();
+                return View("ErrorView", new ErrorDto(ex.Message, 400));
             }
         }
 
         // GET: Subject/Edit/5
         public ActionResult Edit(int id)
         {
-            return RedirectToAction("Edit", new {groupId = id});
+            return View();
         }
 
         [HttpPost]
@@ -100,5 +114,8 @@ namespace Client.Controllers
                 return View("ErrorView", new ErrorDto(ex.Message, 400));
             }
         }
+        
+        #endregion
+
     }
 }

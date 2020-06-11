@@ -11,5 +11,6 @@ namespace BusinessLogic.Services
         Task CreateSubjectAsync(NewSubjectDto subjectDto);
         Task RemoveSubjectAsync(int subjectId);
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync();
+        Task<IList<SubjectInfoDto>> GetSubjectInfosAsync(int groupId);
     }
 }
