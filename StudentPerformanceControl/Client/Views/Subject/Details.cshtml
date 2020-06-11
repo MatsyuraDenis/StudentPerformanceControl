@@ -15,6 +15,8 @@
             <th>Module 1</th>
             <th>Module 2</th>
             <th>Exam</th>
+            <th>Total</th>
+            <th>Edit</th>
         </tr>
         </thead>
         <tbody>
@@ -29,6 +31,8 @@
                 <td>@performance.Module1Result</td>
                 <td>@performance.Module2Result</td>
                 <td>@performance.ExamResult</td>
+                <td>@performance.TotalPoints</td>
+                <td><a asp-action="Edit" asp-controller="Subject" asp-route-studentId="@performance.StudentId" asp-route-subjectId="@performance.SubjectId">Edit</a></td>
             </tr>
         }
         </tbody>

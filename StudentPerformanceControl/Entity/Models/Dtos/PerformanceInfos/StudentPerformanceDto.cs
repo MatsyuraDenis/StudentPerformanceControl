@@ -15,5 +15,11 @@ namespace Entity.Models.Dtos.PerformanceInfos
 
         public IEnumerable<HomeworkResultDto> Homeworks { get; set; }
         public IList<HomeworkResultDto> EditableHomeworks { get; set; }
+
+        public StudentPerformanceDto()
+        {
+            Homeworks = new List<HomeworkResultDto>();
+            EditableHomeworks = new List<HomeworkResultDto>();
+        }
     }
 }

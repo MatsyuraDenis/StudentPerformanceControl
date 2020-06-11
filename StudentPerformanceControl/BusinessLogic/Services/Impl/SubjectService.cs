@@ -79,11 +79,10 @@ namespace BusinessLogic.Services.Impl
             foreach (var studentPerformance in dbSubject.StudentPerformances)
             {
                 studentPerformance.TotalPoints = studentPerformance.Homeworks
-                                                     .Where(homework => homework.Points != null)
                                                      .Sum(homework => (int) homework.Points)
-                                                 + studentPerformance.Module1Result
-                                                 + studentPerformance.Module2Result 
-                                                 + studentPerformance.ExamResult;
+                                                    + studentPerformance.Module1Result
+                                                    + studentPerformance.Module2Result 
+                                                    + studentPerformance.ExamResult;
 
                 studentPerformance.EditableHomeworks = studentPerformance.Homeworks.ToList();
             }

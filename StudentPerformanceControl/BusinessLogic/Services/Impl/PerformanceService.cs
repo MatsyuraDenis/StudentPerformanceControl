@@ -48,5 +48,40 @@ namespace BusinessLogic.Services.Impl
 
             await _repository.SaveContextAsync();
         }
+
+        public async Task<StudentPerformanceDto> GetStudentPerformanceAsync(int studentId, int subjectId)
+        {
+            var studentPerformance = await _repository.GetAll<Subject>()
+                .Where(subject => subject.SubjectId == subjectId)
+                .Select(subject => subject.StudentPerformances
+                    .Where(performance => performance.StudentId == studentId)
+                    .Select(performance => new StudentPerformanceDto
+                    {
+                        StudentId = performance.StudentId,
+                        SubjectId = performance.SubjectId,
+                        StudentName = performance.Student.Name,
+                        StudentSecondName = performance.Student.SecondName,
+                        ExamResult = performance.ExamPoints,
+                        Module1Result = performance.Module1TestPoints,
+                        Module2Result = performance.Module2TestPoints,
+                        Homeworks = performance.HomeworkResults.Select(result => new HomeworkResultDto
+                        {
+                            HomeworkId = result.HomeworkInfoId,
+                            HomeworkResultId = result.HomeworkResultId,
+                            HomeworkNumber = _repository.GetAll<HomeworkInfo>()
+                                .Where(info => info.HomeworkInfoId == result.HomeworkInfoId)
+                                .Sum(info => info.Number),
+                            Points = result.Points
+                        })
+                    }))
+                    .SingleOrDefaultAsync();
+
+            var res = studentPerformance.SingleOrDefault() ??
+                      throw new SPCException($"Student {studentId} don't have results for subject {subjectId}", 404);
+
+            res.EditableHomeworks = res.Homeworks.ToList();
+            
+            return res;
+        }
     }
 }

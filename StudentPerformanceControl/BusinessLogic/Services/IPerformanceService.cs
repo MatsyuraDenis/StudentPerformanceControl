@@ -6,5 +6,6 @@ namespace BusinessLogic.Services
     public interface IPerformanceService
     {
         Task EditPerformanceAsync(StudentPerformanceDto studentPerformanceDto);
+        Task<StudentPerformanceDto> GetStudentPerformanceAsync(int studentId, int subjectId);
     }
 }

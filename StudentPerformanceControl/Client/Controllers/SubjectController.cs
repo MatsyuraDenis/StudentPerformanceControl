@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Services;
+using DataCore.EntityModels;
 using DataCore.Exceptions;
 using Entity.Models.Dtos;
+using Entity.Models.Dtos.PerformanceInfos;
 using Entity.Models.Dtos.Subject;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,14 +19,16 @@ namespace Client.Controllers
         #region MyRegion
 
         private readonly ISubjectService _subjectService;
+        private readonly IPerformanceService _performanceService;
 
         #endregion
 
         #region ctor
 
-        public SubjectController(ISubjectService subjectService)
+        public SubjectController(ISubjectService subjectService, IPerformanceService performanceService)
         {
             _subjectService = subjectService;
+            _performanceService = performanceService;
         }
 
         #endregion
@@ -76,20 +80,21 @@ namespace Client.Controllers
         }
 
         // GET: Subject/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int studentId, int subjectId)
         {
-            return View();
+            var performance = await _performanceService.GetStudentPerformanceAsync(studentId, subjectId);
+            return View(performance);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditSubject(int groupId)
+        public async Task<ActionResult> EditSubject(StudentPerformanceDto studentPerformance)
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
+                await _performanceService.EditPerformanceAsync(studentPerformance);
+                
+                return RedirectToAction("Details", "Subject", new {id = studentPerformance.SubjectId});
             }
             catch(SPCException ex)
             {
