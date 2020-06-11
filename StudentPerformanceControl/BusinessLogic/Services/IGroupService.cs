@@ -10,6 +10,7 @@ namespace BusinessLogic.Services
     {
         Task<IList<GroupDto>> GetGroupsAsync();
         Task<GroupDto> GetGroupAsync(int groupId);
-        Task<int> AddGroup(AddGroupDto group);
+        Task<int> AddGroupAsync(AddGroupDto group);
+        Task DeactivateGroupAsync(int groupId);
     }
 }

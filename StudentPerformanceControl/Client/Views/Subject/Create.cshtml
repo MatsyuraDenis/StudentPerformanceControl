@@ -1,0 +1,31 @@
+@model Entity.Models.Dtos.Subject.NewSubjectDto
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h2>Edit student performance</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" asp-controller="Subject">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Module1MaxPoints" class="control-label">Module 1 max points</label>
+                    <input asp-for="Module1MaxPoints" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module2MaxPoints" class="control-label">Module 2 max points</label>
+                    <input asp-for="Module2MaxPoints" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExamMaxPoints" class="control-label">Exam</label>
+                    <input asp-for="ExamMaxPoints" class="form-control" />
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>

@@ -1,7 +1,58 @@
-﻿
+﻿@model Entity.Models.Dtos.GroupDto
+
 @{
     ViewData["Title"] = "Edit";
+    var studentIndex = 1;
+    var subjectIndex = 1;
 }
 
-<h1>Edit</h1>
+<a class="btn btn-primary" asp-action="Create" asp-controller="Subject">Add subject</a>
+<div class="m-1">
+     <h3 class="m-1"> Subject </h3>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th>Number</th>
+                <th>Title</th>
+                <th>Details</th>
+            </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in Model.Subjects)
+                {
+                    <tr>
+                        <td>@subjectIndex</td>
+                        <td>@subject.SubjectName</td>
+                        <td><a asp-action="Details" asp-controller="Subject" asp-route-id="@subject.Id">Details</a></td>
+                    </tr>
+                    subjectIndex++;
+                }
+            </tbody>
+        </table>
+</div>
+
+<a class="btn btn-primary" asp-action="Create" asp-controller="Student" asp-route-group-id="@Model.Id">Add student</a>
+<div>
+    <h3 class="m-1"> Students </h3>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>Number</th>
+            <th>SecondName</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>@studentIndex</td>
+                <td>@student.SecondName</td>
+                <td>@student.Name</td>
+            </tr>
+            studentIndex++;
+        }
+        </tbody>
+    </table>
+</div>
 

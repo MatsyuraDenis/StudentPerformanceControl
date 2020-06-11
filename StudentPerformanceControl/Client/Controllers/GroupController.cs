@@ -51,7 +51,7 @@ namespace Client.Controllers
         {
             try
             {
-                var newGroupId = await _groupService.AddGroup(groupDto);
+                var newGroupId = await _groupService.AddGroupAsync(groupDto);
 
                 return RedirectToAction("Details", new { id = newGroupId } );
             }
@@ -85,6 +85,27 @@ namespace Client.Controllers
             catch
             {
                 return View();
+            }
+        }
+        
+        public ActionResult Delete(int id)
+        {
+            return RedirectToAction("Deactivate",new {groupId = id});
+        }
+
+        // POST: Student/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Deactivate(int groupId)
+        {
+            try
+            {
+                await _groupService.DeactivateGroupAsync(groupId)
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View("Error");
             }
         }
     }

@@ -60,12 +60,12 @@ namespace Client.Controllers
         // GET: Subject/Edit/5
         public ActionResult Edit(int id)
         {
-            return RedirectToAction("Edit", id);
+            return RedirectToAction("Edit", new {groupId = id});
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditSubject(int id, IFormCollection collection)
+        public ActionResult EditSubject(int groupId)
         {
             try
             {
@@ -86,13 +86,13 @@ namespace Client.Controllers
         // GET: Subject/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return RedirectToAction("DeleteGroup", new {groupId = id});
         }
 
         // POST: Subject/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult DeleteGroup(int groupId)
         {
             try
             {

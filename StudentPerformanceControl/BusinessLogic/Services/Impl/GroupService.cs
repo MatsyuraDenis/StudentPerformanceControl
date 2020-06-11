@@ -57,7 +57,7 @@ namespace BusinessLogic.Services.Impl
                 .SingleOrDefaultAsync(group => group.Id == groupId);
         }
 
-        public async Task<int> AddGroup(AddGroupDto group)
+        public async Task<int> AddGroupAsync(AddGroupDto group)
         {
             var newGroup = new Group
             {
@@ -69,6 +69,18 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
             
             return newGroup.GroupId;
+        }
+
+        public async Task DeactivateGroupAsync(int groupId)
+        {
+            var dbGroup = await _repository.GetAll<Group>()
+                .SingleOrDefaultAsync(group => group.GroupId == groupId);
+
+            dbGroup.GroupTypeId = (int) GroupTypes.Former;
+            
+            _repository.Update(dbGroup);
+
+            await _repository.SaveContextAsync();
         }
 
         #endregion
