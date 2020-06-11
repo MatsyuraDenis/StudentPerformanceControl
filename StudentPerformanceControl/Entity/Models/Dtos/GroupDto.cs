@@ -10,5 +10,11 @@ namespace Entity.Models.Dtos
         public int Type { get; set; }
         public IEnumerable<SubjectDto> Subjects { get; set; }
         public IEnumerable<StudentDto> Students { get; set; }
+
+        public GroupDto()
+        {
+            Subjects = new List<SubjectDto>();
+            Students = new List<StudentDto>();
+        }
     }
 }
