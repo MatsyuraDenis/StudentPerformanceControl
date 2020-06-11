@@ -80,12 +80,33 @@ namespace BusinessLogic.Services.Impl
 
         public async Task AddStudentAsync(StudentDto studentDto)
         {
-            _repository.Add(new Student
+            var student =new Student
             {
                 Name = studentDto.Name,
                 SecondName = studentDto.SecondName,
                 GroupId = studentDto.GroupId
-            });
+            };
+            
+            _repository.Add(student);
+
+            await _repository.SaveContextAsync();
+
+            var subjectIds = await _repository.GetAll<Subject>()
+                .Where(subject => subject.GroupId == student.GroupId)
+                .Select(subject => subject.SubjectId)
+                .ToListAsync();
+
+            foreach (var subjectId in subjectIds)
+            {
+                _repository.Add(new StudentPerformance
+                {
+                    SubjectId = subjectId,
+                    ExamPoints = 0,
+                    Module1TestPoints = 0,
+                    Module2TestPoints = 0,
+                    StudentId = student.StudentId
+                });
+            }
 
             await _repository.SaveContextAsync();
         }

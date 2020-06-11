@@ -52,8 +52,9 @@ namespace Client.Controllers
             try
             {
                 var newGroupId = await _groupService.AddGroupAsync(groupDto);
+                var newGroup = await _groupService.GetGroupAsync(newGroupId);
 
-                return RedirectToAction("Details", new { id = newGroupId } );
+                return RedirectToAction("EditFromTemplate", new { groupDto = newGroup } );
             }
             catch (SPCException ex)
             {
@@ -66,9 +67,15 @@ namespace Client.Controllers
         }
 
         // GET: Group/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditFromTemplate(GroupDto groupDto)
         {
-            return View();
+            return View("Edit", groupDto);
+        }
+        
+        public async Task<ActionResult> Edit(int groupId)
+        {
+            var group = await _groupService.GetGroupAsync(groupId);
+            return View(group);
         }
 
         // POST: Group/Edit/5
@@ -88,19 +95,11 @@ namespace Client.Controllers
             }
         }
         
-        public ActionResult Delete(int id)
-        {
-            return RedirectToAction("Deactivate",new {groupId = id});
-        }
-
-        // POST: Student/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Deactivate(int groupId)
+        public async Task<ActionResult> Deactivate(int id)
         {
             try
             {
-                await _groupService.DeactivateGroupAsync(groupId)
+                await _groupService.DeactivateGroupAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

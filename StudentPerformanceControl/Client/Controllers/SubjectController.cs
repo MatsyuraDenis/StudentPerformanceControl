@@ -35,21 +35,25 @@ namespace Client.Controllers
         }
 
         // GET: Subject/Create
-        public ActionResult Create()
+        public ActionResult Create(int groupId)
         {
-            return View();
+            var subject = new NewSubjectDto
+            {
+                GroupId = groupId
+            };
+            return View(subject);
         }
 
         // POST: Subject/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(NewSubjectDto subject)
+        public async Task<ActionResult> Create(NewSubjectDto subject)
         {
             try
             {
-                // TODO: Add insert logic here
+                await _subjectService.CreateSubjectAsync(subject);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Group", new {groupId = subject.GroupId});
             }
             catch
             {
@@ -84,25 +88,16 @@ namespace Client.Controllers
         }
 
         // GET: Subject/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return RedirectToAction("DeleteGroup", new {groupId = id});
-        }
-
-        // POST: Subject/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteGroup(int groupId)
+        public async Task<ActionResult> Delete(int id, int groupId)
         {
             try
             {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
+                await _subjectService.RemoveSubjectAsync(id);
+                return RedirectToAction("Details", "Group", new { id = groupId });
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                return View("ErrorView", new ErrorDto(ex.Message, 400));
             }
         }
     }

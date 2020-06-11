@@ -38,6 +38,7 @@ namespace BusinessLogic.Services.Impl
             _logService.LogInfo("Start loading groups");
             
             var groups = await _repository.GetAll<Group>()
+                .Where(group => group.GroupTypeId != (int) GroupTypes.Former)
                 .Select(group => new GroupDto
                 {
                     Id = group.GroupId,

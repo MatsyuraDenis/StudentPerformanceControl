@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLogic.Services;
+using Entity.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,13 @@ namespace Client.Controllers
 {
     public class StudentController : Controller
     {
+        private readonly IStudentService _studentService;
+
+        public StudentController(IStudentService studentService)
+        {
+            _studentService = studentService;
+        }
+
         // GET: Student
         public ActionResult Index()
         {
@@ -22,21 +31,25 @@ namespace Client.Controllers
         }
 
         // GET: Student/Create
-        public ActionResult Create()
+        public ActionResult Create(int groupId)
         {
-            return View();
+            var student = new StudentDto
+            {
+                GroupId = groupId
+            };
+            return View(student);
         }
 
         // POST: Student/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(StudentDto studentDto)
         {
             try
             {
-                // TODO: Add insert logic here
+                await _studentService.AddStudentAsync(studentDto);
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Edit", "Group", new {groupId = studentDto.GroupId});
             }
             catch
             {

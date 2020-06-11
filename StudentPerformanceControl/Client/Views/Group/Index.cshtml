@@ -23,7 +23,9 @@
                 <td> @index </td>
                 <td> @group.Title </td>
                 <td><a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a></td>
-                <td><a asp-action="Delete" asp-controller="Group" asp-route-id="@group.Id">Deactivate</a></td>
+                <td>
+                    <a asp-action="Deactivate" asp-controller="Group" asp-route-id="@group.Id">Deactivate</a>
+                </td>
             </tr>
             index++;
         }

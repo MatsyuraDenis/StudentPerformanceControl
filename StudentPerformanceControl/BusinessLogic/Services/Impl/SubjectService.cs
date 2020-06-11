@@ -135,7 +135,7 @@ namespace BusinessLogic.Services.Impl
         {
             var dbSubject = await _repository.GetAll<Subject>()
                 .SingleOrDefaultAsync(subject => subject.SubjectId == subjectId);
-            
+
             _repository.Delete(dbSubject);
 
             await _repository.SaveContextAsync();
