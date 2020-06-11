@@ -34,6 +34,8 @@ namespace BusinessLogic.Services.Impl
             studentPerformance.Module2TestPoints = studentPerformanceDto.Module2Result;
             studentPerformance.ExamPoints = studentPerformanceDto.ExamResult;
 
+            _repository.Update(studentPerformance);
+            
             foreach (var homework in studentPerformanceDto.EditableHomeworks)
             {
                 var dbHomework = studentPerformance.HomeworkResults.SingleOrDefault(result =>
