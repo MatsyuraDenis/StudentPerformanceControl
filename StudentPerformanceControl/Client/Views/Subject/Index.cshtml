@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Entity.Models.Dtos.Subject.SubjectInfoDto>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div>
+    <h2>Subject</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Group Used</th>
+            <th>Edit</th>
+            <th>Deactivate</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var subject in Model)
+        {
+            <tr>
+                <td>@subject.Title</td>
+                <td>@subject.GroupUsed</td>
+                <td><a asp-action="Edit" asp-controller="Subject" asp-route-subject="@subject">Edit</a></td>
+                <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject">Deactivare</a></td>
+            </tr>
+        }
+        </tbody>
+        
+    </table>
+</div>
+

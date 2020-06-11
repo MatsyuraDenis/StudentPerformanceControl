@@ -8,11 +8,6 @@ namespace DataCore.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Subject> builder)
         {
-            builder.HasOne(subject => subject.Teacher)
-                .WithMany(teacher => teacher.AssignedSubjects)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
             builder.HasOne(subject => subject.SubjectInfo)
                 .WithMany(info => info.Subjects)
                 .IsRequired()

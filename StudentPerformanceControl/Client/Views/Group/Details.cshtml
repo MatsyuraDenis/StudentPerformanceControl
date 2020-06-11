@@ -5,16 +5,17 @@
     var subjectIndex = 1;
 }
 
-<h1 class="align-content-center m-5">@Model.Title group</h1>
+<h1 class="align-content-center m-1">@Model.Title group</h1>
 
 
-<div class="m-5">
-     <h3 class="m-5"> Subject </h3>
+<div class="m-1">
+     <h3 class="m-1"> Subject </h3>
         <table class="table table-striped">
             <thead class="thead-dark">
             <tr>
                 <th>Number</th>
                 <th>Title</th>
+                <th>Details</th>
             </tr>
             </thead>
             <tbody>
@@ -23,6 +24,7 @@
                     <tr>
                         <td>@subjectIndex</td>
                         <td>@subject.SubjectName</td>
+                        <td><a asp-action="Details" asp-controller="Subject" asp-route-id="@subject.Id">Details</a></td>
                     </tr>
                     subjectIndex++;
                 }
@@ -30,8 +32,8 @@
         </table>
 </div>
 
-<div class="m-5">
-    <h3 class="m-5"> Students </h3>
+<div>
+    <h3 class="m-1"> Students </h3>
     <table class="table table-striped">
         <thead class="thead-dark">
         <tr>

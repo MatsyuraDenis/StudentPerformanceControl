@@ -1,0 +1,39 @@
+﻿@model Entity.Models.Dtos.PerformanceInfos.SubjectPerformanceInfoDto
+@{
+    ViewData["Title"] = "Index";
+}
+
+<<div>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Student</th>
+            @foreach (var setting in Model.SubjectSettings.HomeworkSettings)
+            {
+                <th>@setting.HomeworkNumber</th>
+            }
+            <th>Module 1</th>
+            <th>Module 2</th>
+            <th>Exam</th>
+            <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var performance in Model.StudentPerformances)
+        {
+            <tr>
+                <td>@(performance.StudentSecondName + " " + performance.StudentName)</td>
+                @foreach (var homework in performance.Homeworks)
+                {
+                    <td>@homework.Points</td>
+                }
+                <td>@performance.Module1Result</td>
+                <td>@performance.Module2Result</td>
+                <td>@performance.ExamResult</td>
+                <td><a>Edit</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+

@@ -1,0 +1,46 @@
+﻿@model Entity.Models.Dtos.PerformanceInfos.StudentPerformanceDto
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container">
+    <h2>Edit student performance</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create" asp-controller="Group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Module1Result" class="control-label">Module 1 test</label>
+                    <input asp-for="Module1Result" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module2Result" class="control-label">Module 2 test</label>
+                    <input asp-for="Module2Result" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="ExamResult" class="control-label">Exam</label>
+                    <input asp-for="ExamResult" class="form-control" />
+                </div>
+                <div>
+                    <table>
+                        @for (var i = 0; i < Model.Homeworks.Count(); i++)
+                        {
+                            <div class="form-group">
+                                <label asp-for="EditableHomeworks[i].Points" class="control-label">@Model.EditableHomeworks[i].HomeworkNumber</label>
+                                <input asp-for="EditableHomeworks[i].Points" class="form-control" />
+                            </div>    
+                        }
+                    </table>
+                </div>
+                @Html.HiddenFor(g=>g.StudentName)
+                @Html.HiddenFor(g=>g.StudentSecondName)
+                @Html.HiddenFor(g=>g.StudentId)
+                @Html.HiddenFor(g=>g.TotalPoints)
+                @Html.HiddenFor(g=>g.Homeworks)
+            </form>
+            
+        </div>
+    </div>
+</div>
+

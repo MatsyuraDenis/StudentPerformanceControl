@@ -1,4 +1,5 @@
-﻿@model IList<Entity.Models.Dtos.GroupDto>
+﻿@using Entity.Models.Enums
+@model IList<Entity.Models.Dtos.GroupDto>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,7 +7,7 @@
 }
 
 <div class="container">
-    <table class="table table-striped m-5">
+    <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
             <th>Number</th>
@@ -22,7 +23,14 @@
                 <td> @index </td>
                 <td> @group.Title </td>
                 <td> <a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a></td>
-                <td> <a asp-controller="Group" asp-action="Edit" asp-route-id="@group.Id">Edit</a></td>
+                @if (group.Type == (int) GroupTypes.Created)
+                {
+                    <td> <a asp-controller="Group" asp-action="Edit" asp-route-id="@group.Id">Edit</a></td>
+                }
+                else 
+                {
+                     <td>Active</td>
+                }
             </tr>
             index++;
         }

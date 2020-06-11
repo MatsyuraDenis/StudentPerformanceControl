@@ -59,6 +59,7 @@ namespace BusinessLogic.Services.Impl
                     StudentPerformances = subject.StudentPerformances.Select(performance => new StudentPerformanceDto
                     {
                         StudentId = performance.StudentId,
+                        SubjectId = performance.SubjectId,
                         StudentName = performance.Student.Name,
                         StudentSecondName = performance.Student.SecondName,
                         ExamResult = performance.ExamPoints,
@@ -74,7 +75,19 @@ namespace BusinessLogic.Services.Impl
                 })
                 .SingleOrDefaultAsync()
                 ?? throw new SPCException($"subject with id {subjectId} does not exists", StatusCodes.Status404NotFound);
-            
+
+            foreach (var studentPerformance in dbSubject.StudentPerformances)
+            {
+                studentPerformance.TotalPoints = studentPerformance.Homeworks
+                                                     .Where(homework => homework.Points != null)
+                                                     .Sum(homework => (int) homework.Points)
+                                                 + studentPerformance.Module1Result
+                                                 + studentPerformance.Module2Result 
+                                                 + studentPerformance.ExamResult;
+
+                studentPerformance.EditableHomeworks = studentPerformance.Homeworks.ToList();
+            }
+
             _logService.LogInfo($"Loading subject performance info with subject id = {subjectId} completed");
 
             return dbSubject;
@@ -129,13 +142,16 @@ namespace BusinessLogic.Services.Impl
 
         }
 
-        public async Task<IList<SubjectInfoDetailsDto>> GetSubjectInfosAsync()
+        public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync()
         {
             return await _repository.GetAll<SubjectInfo>()
-                .Select(info => new SubjectInfoDetailsDto
+                .Select(info => new SubjectInfoDto
                 {
                     Id = info.SubjectInfoId,
-                    Title = info.Title
+                    Title = info.Title,
+                    GroupUsed = _repository.GetAll<Group>()
+                        .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId))
+                        .Count()
                 })
                 .ToListAsync();
         }
