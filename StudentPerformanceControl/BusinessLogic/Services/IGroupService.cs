@@ -11,6 +11,7 @@ namespace BusinessLogic.Services
         Task<IList<GroupDto>> GetGroupsAsync(int groupType);
         Task<GroupDto> GetGroupAsync(int groupId);
         Task<int> AddGroupAsync(AddGroupDto group);
+        Task<int> BoostGroupAsync(int groupId);
         Task SaveAsync(int groupId);
         Task DeactivateGroupAsync(int groupId);
     }

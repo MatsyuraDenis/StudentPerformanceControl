@@ -63,6 +63,15 @@ namespace Client.Controllers
 
             return RedirectToAction("Index");
         }
+        
+        [HttpGet]
+        public async Task<ActionResult> Update(int groupId)
+        {
+            var newId = await _groupService.BoostGroupAsync(groupId);
+            var group = await _groupService.GetGroupAsync(newId);
+
+            return RedirectToAction("Edit", group);
+        }
 
         // POST: Group/Create
         [HttpPost]

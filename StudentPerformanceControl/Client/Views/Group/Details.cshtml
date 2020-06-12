@@ -1,4 +1,5 @@
-﻿@model Entity.Models.Dtos.GroupDto
+﻿@using Entity.Models.Enums
+@model Entity.Models.Dtos.GroupDto
 @{
     ViewData["Title"] = "Details";
     var studentIndex = 1;
@@ -7,6 +8,10 @@
 
 <h1 class="align-content-center m-1">@Model.Title group</h1>
 
+@if (Model.Type == (int) GroupTypes.Active)
+{
+    <a asp-action="Update" asp-controller="Group" asp-route-groupId="@Model.Id" class="btn btn-sm btn-primary">Boost</a>
+}
 
 <div class="m-1">
      <h3 class="m-1"> Subject </h3>

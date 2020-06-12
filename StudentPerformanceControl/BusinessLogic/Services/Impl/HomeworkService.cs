@@ -56,6 +56,21 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task<HomeworkDto> GetHomeworkDtoAsync(int homeworkId)
+        {
+            return await _repository.GetAll<HomeworkInfo>()
+                .Where(homework => homework.HomeworkInfoId == homeworkId)
+                .Select(homework => new HomeworkDto
+                {
+                    HomeworkId = homeworkId,
+                    HomeworkTitle = homework.Title,
+                    MaxPoints = homework.MaxPoints,
+                    SubjectId = homework.SubjectSetting.SubjectId
+                })
+                .SingleOrDefaultAsync()
+                   ?? throw new SPCException($"Homework with id {homeworkId} does not exists", 404);
+        }
+
         public async Task EditHomeworkAsync(HomeworkDto homeworkDto)
         {
             var dbHomework = await _repository.GetAll<HomeworkInfo>()

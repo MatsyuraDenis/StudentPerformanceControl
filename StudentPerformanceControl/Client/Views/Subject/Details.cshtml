@@ -1,4 +1,5 @@
-﻿@model Entity.Models.Dtos.PerformanceInfos.SubjectPerformanceInfoDto
+﻿@using Entity.Models.Enums
+@model Entity.Models.Dtos.PerformanceInfos.SubjectPerformanceInfoDto
 @{
     ViewData["Title"] = "Index";
 }
@@ -16,7 +17,10 @@
             <th>Module 2</th>
             <th>Exam</th>
             <th>Total</th>
-            <th>Edit</th>
+            @if (Model.GroupType == (int) GroupTypes.Active)
+            {
+                <th>Edit</th>
+            }
         </tr>
         </thead>
         <tbody>
@@ -32,7 +36,10 @@
                 <td>@performance.Module2Result</td>
                 <td>@performance.ExamResult</td>
                 <td>@performance.TotalPoints</td>
-                <td><a asp-action="Edit" asp-controller="Subject" asp-route-studentId="@performance.StudentId" asp-route-subjectId="@performance.SubjectId">Edit</a></td>
+                @if (Model.GroupType == (int) GroupTypes.Active)
+                {
+                    <td><a asp-action="Edit" asp-controller="Subject" asp-route-studentId="@performance.StudentId" asp-route-subjectId="@performance.SubjectId">Edit</a></td>
+                }
             </tr>
         }
         </tbody>

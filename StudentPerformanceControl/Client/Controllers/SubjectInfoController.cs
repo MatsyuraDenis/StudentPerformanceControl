@@ -73,6 +73,22 @@ namespace Client.Controllers
             }
         }
 
+        public async Task<ActionResult> Delete(int subjectInfoId)
+        {
+            try
+            {
+                await _subjectService.DeleteSubjectInfoAsync(subjectInfoId);
+                return RedirectToAction("Index");
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
         #endregion
         
     }

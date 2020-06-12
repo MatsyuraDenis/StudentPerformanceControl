@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace BusinessLogic.Services.Impl
                 .Select(subject => new SubjectPerformanceInfoDto
                 {
                     SubjectId = subject.SubjectId,
+                    GroupType = subject.Group.GroupTypeId,
                     SubjectSettings = new SubjectSettingDto
                     {
                         SubjectSettingId = subject.SubjectSetting.SubjectSettingId,
@@ -152,6 +154,17 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task DeleteSubjectInfoAsync(int subjectInfoId)
+        {
+            var subjectInfo = await _repository.GetAll<SubjectInfo>()
+                                  .SingleOrDefaultAsync(info => info.SubjectInfoId == subjectInfoId)
+                              ?? throw new SPCException($"Subject info with id {subjectInfoId} does bot exists", 404);
+            
+            _repository.Delete(subjectInfo);
+
+            await _repository.SaveContextAsync();
+        }
+
         public async Task RemoveSubjectAsync(int subjectId)
         {
             var dbSubject = await _repository.GetAll<Subject>()
@@ -173,6 +186,10 @@ namespace BusinessLogic.Services.Impl
                     GroupLearn = _repository.GetAll<Group>()
                         .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId)
                             && group.GroupTypeId == (int) GroupTypes.Active)
+                        .Count(),
+                    GroupLearned = _repository.GetAll<Group>()
+                        .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId)
+                                        && group.GroupTypeId == (int) GroupTypes.Former)
                         .Count()
                 })
                 .ToListAsync();

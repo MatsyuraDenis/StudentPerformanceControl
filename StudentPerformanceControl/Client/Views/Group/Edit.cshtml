@@ -26,6 +26,7 @@
                     <tr>
                         <td>@subjectIndex</td>
                         <td>@subject.SubjectName</td>
+                        <td><a asp-action="Edit" asp-controller="Subject" asp-route-subject="@subject">Details</a></td>
                         <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject.Id" asp-route-groupId="@Model.Id">Delete</a></td>
                     </tr>
                     subjectIndex++;

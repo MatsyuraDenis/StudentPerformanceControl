@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,6 +44,7 @@ namespace BusinessLogic.Services.Impl
                 .Select(group => new GroupDto
                 {
                     Id = group.GroupId,
+                    Type = group.GroupTypeId,
                     Title = group.GroupName
                 })
                 .OrderBy(group => group.Title)
@@ -70,6 +72,37 @@ namespace BusinessLogic.Services.Impl
             _repository.Add(newGroup);
             await _repository.SaveContextAsync();
             
+            return newGroup.GroupId;
+        }
+
+        public async Task<int> BoostGroupAsync(int groupId)
+        {
+            var dbGroup = await _repository.GetAll<Group>()
+                .Include(group => group.Students)
+                .SingleOrDefaultAsync(group => group.GroupId == groupId);
+            
+            var newGroup = new Group
+            {
+                GroupTypeId = (int) GroupTypes.Created,
+                GroupName = dbGroup.GroupName
+            };
+            
+            _repository.Add(newGroup);
+
+            await _repository.SaveContextAsync();
+
+            foreach (var student in dbGroup.Students)
+            {
+                student.GroupId = newGroup.GroupId;
+                _repository.Update(student);
+            }
+
+            dbGroup.GroupTypeId = (int) GroupTypes.Former;
+            
+            _repository.Update(dbGroup);
+
+            await _repository.SaveContextAsync();
+
             return newGroup.GroupId;
         }
 
@@ -122,7 +155,7 @@ namespace BusinessLogic.Services.Impl
                     }).OrderBy(student => student.SecondName)
                 });
         }
-
+        
         #endregion
     }
 }

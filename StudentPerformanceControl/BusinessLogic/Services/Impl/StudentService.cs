@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -115,6 +116,10 @@ namespace BusinessLogic.Services.Impl
         {
             var dbStudent = await _repository.GetAll<Student>()
                 .SingleOrDefaultAsync(student => student.StudentId == studentId);
+            
+            _repository.Delete(dbStudent);
+
+            await _repository.SaveContextAsync();
         }
 
         #endregion

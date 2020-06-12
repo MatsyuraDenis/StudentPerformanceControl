@@ -13,7 +13,9 @@
         <th>Number</th>
         <th>Title</th>
         <th>Groups learn</th>
+        <th>Groups learned</th>
         <th>Edit</th>
+        <th>Delete</th>
     </tr>
     </thead>
     <tbody>
@@ -23,7 +25,16 @@
             <td>@number</td>
             <td>@subject.Title</td>
             <td>@subject.GroupLearn</td>
+            <td>@subject.GroupLearned</td>
             <td><a asp-action="Edit" asp-controller="SubjectInfo" asp-route-subjectInfoDto="@subject">Edit</a></td>
+            @if (subject.GroupLearn + subject.GroupLearned == 0)
+            {
+                <td><a asp-action="Delete" asp-controller="SubjectInfo" asp-route-subjectInfoId="@subject.Id">Delete</a></td>
+            }
+            else
+            {
+                <td>Subject in used; Imposible to delete</td>
+            }
         </tr>
     }
     </tbody>

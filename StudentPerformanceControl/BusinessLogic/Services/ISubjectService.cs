@@ -10,6 +10,7 @@ namespace BusinessLogic.Services
         Task<SubjectPerformanceInfoDto>  GetSubjectPerformanceInfoAsync(int subjectId);
         Task CreateSubjectAsync(NewSubjectDto subjectDto);
         Task EditSubjectAsync(NewSubjectDto subjectDto);
+        Task DeleteSubjectInfoAsync(int subjectInfoId);
         Task RemoveSubjectAsync(int subjectId);
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync();
         Task CreateSubjectInfoAsync(SubjectInfoDto subjectInfoDto);
