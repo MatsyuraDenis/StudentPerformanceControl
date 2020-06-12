@@ -8,10 +8,6 @@ namespace DataCore.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Group> builder)
         {
-            builder.HasOne(group => group.Curator)
-                .WithOne(teacher => teacher.Group)
-                .HasForeignKey<Group>(group => group.CuratorId);
-
             builder.HasMany(group => group.Students)
                 .WithOne(student => student.Group)
                 .HasForeignKey(student => student.GroupId);

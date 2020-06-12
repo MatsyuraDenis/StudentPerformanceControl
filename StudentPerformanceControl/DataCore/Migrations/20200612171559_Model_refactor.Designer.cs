@@ -4,14 +4,16 @@ using DataCore.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataCore.Migrations
 {
     [DbContext(typeof(SPCContext))]
-    partial class SPCContextModelSnapshot : ModelSnapshot
+    [Migration("20200612171559_Model_refactor")]
+    partial class Model_refactor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +75,7 @@ namespace DataCore.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("SubjectId")
+                    b.Property<int>("SubjectSettingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -81,7 +83,7 @@ namespace DataCore.Migrations
 
                     b.HasKey("HomeworkInfoId");
 
-                    b.HasIndex("SubjectId");
+                    b.HasIndex("SubjectSettingId");
 
                     b.ToTable("HomeworkInfo");
                 });
@@ -226,9 +228,9 @@ namespace DataCore.Migrations
 
             modelBuilder.Entity("DataCore.EntityModels.HomeworkInfo", b =>
                 {
-                    b.HasOne("DataCore.EntityModels.Subject", "Subject")
+                    b.HasOne("DataCore.EntityModels.Subject", "SubjectSetting")
                         .WithMany("HomeworkInfos")
-                        .HasForeignKey("SubjectId")
+                        .HasForeignKey("SubjectSettingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

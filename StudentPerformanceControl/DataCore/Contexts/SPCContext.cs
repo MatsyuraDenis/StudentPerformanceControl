@@ -11,7 +11,6 @@ namespace DataCore.Contexts
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<StudentPerformance> StudentGrades { get; set; }
         public DbSet<SubjectInfo> SubjectInfos { get; set; }
-        public DbSet<Teacher> Teachers { get; set; }
         public DbSet<StudentPerformance> StudentPerformances { get; set; }
         public DbSet<HomeworkResult> HomeworkResults { get; set; }
         
@@ -28,9 +27,7 @@ namespace DataCore.Contexts
             modelBuilder.ApplyConfiguration(new StudentEntityConfiguration());
             modelBuilder.ApplyConfiguration(new StudentPerformanceEntityConfiguration());
             modelBuilder.ApplyConfiguration(new SubjectEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new TeacherEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new TeacherSubjectInfoEntityConfiguration());
-            modelBuilder.ApplyConfiguration(new SubjectSettingEntityConfiguration());
+            
             base.OnModelCreating(modelBuilder);
         }
     }

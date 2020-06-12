@@ -185,10 +185,10 @@ namespace BusinessLogic.Services.Impl
                     {
                         Id = subject.SubjectId,
                         SubjectName = subject.SubjectInfo.Title,
-                        Module1MaxPoints = subject.SubjectSetting.Module1TestMaxPoints,
-                        Module2MaxPoints = subject.SubjectSetting.Module2TestMaxPoints,
-                        ExamMaxPoints = subject.SubjectSetting.ExamMaxPoints,
-                        MaxPoints =  subject.SubjectSetting.ExamMaxPoints
+                        Module1MaxPoints = subject.Module1TestMaxPoints,
+                        Module2MaxPoints = subject.Module2TestMaxPoints,
+                        ExamMaxPoints = subject.ExamMaxPoints,
+                        MaxPoints =  subject.ExamMaxPoints
                     }).OrderBy(subject => subject.SubjectName),
                     Students = group.Students.Select(student => new StudentDto
                     {

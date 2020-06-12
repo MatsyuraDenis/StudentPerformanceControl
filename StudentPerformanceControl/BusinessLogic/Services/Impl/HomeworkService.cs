@@ -40,7 +40,7 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
 
             var studentPerformanceIds = await _repository.GetAll<StudentPerformance>()
-                .Where(performance => performance.Subject.SubjectSetting.SubjectSettingId == dbHomework.SubjectSettingId)
+                .Where(performance => performance.Subject.SubjectId == dbHomework.SubjectId)
                 .Select(performance => performance.StudentPerformanceId)
                 .ToListAsync();
 
