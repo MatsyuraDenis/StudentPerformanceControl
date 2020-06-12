@@ -6,11 +6,11 @@
 }
 
 <div class="container">
-    <h2>Add student</h2>
+    <h2>@Model.SubjectName</h2>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Edit" asp-controller="Homework">
+            <form asp-action="EditHomework" asp-controller="Homework">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="HomeworkTitle" class="control-label">Title</label>
@@ -20,12 +20,13 @@
                     <label asp-for="MaxPoints" class="control-label">Max points</label>
                     <input asp-for="MaxPoints" class="form-control" />
                 </div>
-                @Html.HiddenFor(group => group.HomeworkId)
-                @Html.HiddenFor(group => group.SubjectId)
-                @Html.HiddenFor(group => group.Number)
+                @Html.HiddenFor(homework => homework.HomeworkId)
+                @Html.HiddenFor(homework => homework.GroupId)
+                @Html.HiddenFor(homework => homework.SubjectId)
+                @Html.HiddenFor(homework => homework.Number)
                 <div>
-                    <input type="submit" class="btn btn-primary" value="Submit"/> 
-                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Cancel</a> 
+                    <input type="submit" class="btn btn-sm btn-primary" value="Submit"/> 
+                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Cancel</a> 
                 </div>
             </form>
         </div>

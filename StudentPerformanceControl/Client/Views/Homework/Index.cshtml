@@ -1,10 +1,14 @@
-@model IEnumerable<Entity.Models.Dtos.Homeworks.HomeworkDto>
+@model Entity.Models.Dtos.Homeworks.HomeworkIndexDto
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
 
+<h3>@Model.GroupName group, @Model.SubjectName</h3>
+<h6>Homeworks: @Model.HomeworkSum</h6>
+<h6>Module and Exam: @Model.TestExamSum</h6>
+<h5>Total: @Model.TotalPoints</h5>
 <table class="table table-bordered">
     <thead>
     <tr>
@@ -16,13 +20,17 @@
     </tr>
     </thead>
     <tbody>
-    @foreach (var homework in Model)
+    @foreach (var homework in Model.Homeworks)
     {
-        <tr>@homework.Number</tr>
-        <tr>@homework.HomeworkTitle</tr>
-        <tr>@homework.MaxPoints</tr>
-        <tr><a asp-action="Edit" asp-controller="Homework" asp-route-homeworkDto="@homework">Edit</a></tr>
-        <tr><a asp-action="Delete" asp-controller="Homework" asp-route-homeworkDto="@homework">Edit</a></tr>
+        <tr>
+            <td>@homework.Number</td>
+            <td>@homework.HomeworkTitle</td>
+            <td>@homework.MaxPoints</td>
+            <td><a asp-action="Edit" asp-controller="Homework" asp-route-homeworkId="@homework.HomeworkId">Edit</a></td>
+            <td><a asp-action="Delete" asp-controller="Homework" asp-route-subjectId="@homework.SubjectId" asp-route-homeworkId="@homework.HomeworkId">Delete</a></td>
+        </tr>
     }
     </tbody>
 </table>
+
+<a asp-controller="Group" asp-action="Edit" asp-route-groupId="@Model.GroupId" class="btn btn-sm btn-danger"> To group</a>

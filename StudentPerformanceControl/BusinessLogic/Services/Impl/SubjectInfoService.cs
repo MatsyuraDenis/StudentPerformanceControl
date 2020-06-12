@@ -41,7 +41,7 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
-         public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync()
+        public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync()
         {
             return await _repository.GetAll<SubjectInfo>()
                 .Select(info => new SubjectInfoDto

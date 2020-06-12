@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Entity.Models.Dtos.PerformanceInfos
 {
     public class HomeworkResultDto
@@ -6,5 +8,6 @@ namespace Entity.Models.Dtos.PerformanceInfos
         public int HomeworkResultId { get; set; }
         public int HomeworkNumber { get; set; }
         public int Points { get; set; }
+        public int MaxPoints { get; set; }
     }
 }

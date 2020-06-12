@@ -19,10 +19,10 @@
                 <th>Module 1 test max</th>
                 <th>Module 2 test max</th>
                 <th>Exam max</th>
-                <th>Number of homeworks</th>
-                <th>Max points</th>
+                <th>Homework points</th>
+                <th>Total points</th>
                 <th>Add homework</th>
-                <th>Edit homeworks</th>
+                <th>Homeworks</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -36,11 +36,11 @@
                         <td>@subject.Module1MaxPoints</td>
                         <td>@subject.Module2MaxPoints</td>
                         <td>@subject.ExamMaxPoints</td>
-                        <td>@subject.NumberOfHomeworks</td>
-                        <th>@subject.MaxPoints</th>
-                        <td><a asp-action="Create" asp-controller="Homework" asp-route-subjectId="@subject.Id">Add homework</a></td>
-                        <td><a asp-action="Edit" asp-controller="Homework" asp-route-subjectId="@subject.Id">Edit homeworks</a></td>
-                        <td><a asp-action="EditSubject" asp-controller="Subject" asp-route-subjectId="@subject.Id">Edit</a></td>
+                        <td>@subject.HomeworkPoints</td>
+                        <th>@subject.TotalPoints</th>
+                        <td><a asp-action="Create" asp-controller="Homework" asp-route-subjectId="@subject.Id" asp-route-groupId="@Model.Id">Add homework</a></td>
+                        <td><a asp-action="Index" asp-controller="Homework" asp-route-subjectId="@subject.Id">Edit homeworks</a></td>
+                        <td><a asp-action="EditSubject" asp-controller="Subject" asp-route-subjectId="@subject.Id">Edit tests</a></td>
                         <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject.Id" asp-route-groupId="@Model.Id">Delete</a></td>
                     </tr>
                     subjectIndex++;
@@ -53,7 +53,7 @@
     <h3 class="m-1"> Students <a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Student" asp-route-groupId="@Model.Id">Add student</a> </h3>
     
     <table class="table table-striped">
-        <thead>
+        <thead class="table-dark">
         <tr>
             <th>Number</th>
             <th>SecondName</th>
@@ -69,7 +69,7 @@
                 <td>@studentIndex</td>
                 <td>@student.SecondName</td>
                 <td>@student.Name</td>
-                <td> <a asp-action="Delete" asp-controller="Student" asp-route-id="@student.Id" asp-route-groupId="@student.GroupId"></a> </td>
+                <td> <a asp-action="Delete" asp-controller="Student" asp-route-id="@student.Id" asp-route-groupId="@Model.Id">Delete</a> </td>
             </tr>
             studentIndex++;
         }

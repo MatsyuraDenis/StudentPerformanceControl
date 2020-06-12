@@ -64,6 +64,8 @@ namespace BusinessLogic.Services.Impl
                 .Select(homework => new HomeworkDto
                 {
                     HomeworkId = homeworkId,
+                    SubjectName = homework.Subject.SubjectInfo.Title,
+                    GroupId = homework.Subject.GroupId,
                     HomeworkTitle = homework.Title,
                     MaxPoints = homework.MaxPoints,
                     SubjectId = homework.SubjectId
@@ -72,9 +74,9 @@ namespace BusinessLogic.Services.Impl
                    ?? throw new SPCException($"Homework with id {homeworkId} does not exists", 404);
         }
 
-        public async Task<IList<HomeworkDto>> GetHomeworksAsync(int subjectId)
+        public async Task<HomeworkIndexDto> GetHomeworksAsync(int subjectId)
         {
-            return await _repository.GetAll<HomeworkInfo>()
+            var homeworks =  await _repository.GetAll<HomeworkInfo>()
                 .Where(homework => homework.SubjectId == subjectId)
                 .Select(homework => new HomeworkDto
                 {
@@ -85,6 +87,32 @@ namespace BusinessLogic.Services.Impl
                     SubjectId = homework.SubjectId
                 })
                 .ToListAsync();
+
+            var data = await _repository.GetAll<Subject>()
+                .Where(subject => subject.SubjectId == subjectId)
+                .Select(subject => new
+                {
+                    Subject = subject.SubjectInfo.Title,
+                    Group = subject.Group.GroupName,
+                    GroupId = subject.GroupId,
+                    TestExamSum = subject.Module1TestMaxPoints
+                        + subject.Module2TestMaxPoints
+                        + subject.ExamMaxPoints
+                })
+                .SingleOrDefaultAsync();
+            
+            var index = new HomeworkIndexDto
+            {
+                Homeworks = homeworks,
+                SubjectName = data.Subject,
+                GroupName = data.Group,
+                GroupId = data.GroupId,
+                TestExamSum = data.TestExamSum,
+                HomeworkSum = homeworks.Sum(dto => dto.MaxPoints),
+                TotalPoints = homeworks.Sum(dto => dto.MaxPoints) + data.TestExamSum
+            };
+
+            return index;
         }
 
         public async Task EditHomeworkAsync(HomeworkDto homeworkDto)
@@ -120,6 +148,20 @@ namespace BusinessLogic.Services.Impl
             _repository.Delete(dbHomework);
 
             await _repository.SaveContextAsync();
+        }
+
+        public async Task<NewHomeworkDataDto> GetCreateHomeworkDataAsync(int subjectId)
+        {
+            return await _repository.GetAll<Subject>()
+                       .Where(subject => subject.SubjectId == subjectId)
+                       .Select(subject => new NewHomeworkDataDto
+                       {
+                           SubjectName = subject.SubjectInfo.Title,
+                           SubjectId = subject.SubjectId,
+                           GroupName = subject.Group.GroupName
+                       })
+                       .SingleOrDefaultAsync()
+                   ?? throw new SPCException($"Subject with id {subjectId} does not exists in database", 404);
         }
     }
 }

@@ -101,28 +101,29 @@ namespace BusinessLogic.Services.Impl
             return subjectRes;
         }
 
-        public async Task<SubjectDto> GetSubjectAsync(int subjectId)
+        public async Task<SubjectTestDto> GetSubjectAsync(int subjectId)
         {
-            var res = await _repository.GetAll<Subject>()
+            return await _repository.GetAll<Subject>()
                        .Where(subject => subject.SubjectId == subjectId)
-                       .Select(subject => new SubjectDto
+                       .Select(subject => new SubjectTestDto 
                        {
-                           Id = subject.SubjectId,
-                           GroupId = subject.GroupId,
-                           SubjectInfoId = subject.SubjectInfoId,
-                           ExamMaxPoints = subject.ExamMaxPoints,
-                           Module1MaxPoints = subject.Module1TestMaxPoints,
-                           Module2MaxPoints = subject.Module2TestMaxPoints,
-                           NumberOfHomeworks = subject.HomeworkInfos.Count(),
-                           MaxPoints = subject.ExamMaxPoints +
-                                       subject.Module1TestMaxPoints +
-                                       subject.Module2TestMaxPoints +
-                                       subject.HomeworkInfos.Sum(homework => homework.MaxPoints)
+                           Subject = new SubjectDto
+                           {
+                               Id = subject.SubjectId,
+                               GroupId = subject.GroupId,
+                               SubjectInfoId = subject.SubjectInfoId,
+                               ExamMaxPoints = subject.ExamMaxPoints,
+                               Module1MaxPoints = subject.Module1TestMaxPoints,
+                               Module2MaxPoints = subject.Module2TestMaxPoints,
+                               TotalPoints = subject.ExamMaxPoints +
+                                             subject.Module1TestMaxPoints +
+                                             subject.Module2TestMaxPoints +
+                                             subject.HomeworkInfos.Sum(homework => homework.MaxPoints)
+                           },
+                           HomeworkSum = subject.HomeworkInfos.Sum(homework => homework.MaxPoints)
                        })
                        .SingleOrDefaultAsync()
                    ?? throw new SPCException($"Subject with id {subjectId} does not exists in database", 404);
-
-            return res;
         }
 
         public async Task CreateSubjectAsync(SubjectDto subjectDto)

@@ -61,8 +61,18 @@ namespace BusinessLogic.Services.Impl
 
         public async Task<GroupDto> GetGroupAsync(int groupId)
         {
-            return await GroupQuery()
+            var dbGroup = await GroupQuery()
                 .SingleOrDefaultAsync(group => group.Id == groupId);
+
+            foreach (var subject in dbGroup.Subjects)
+            {
+                subject.TotalPoints = subject.HomeworkPoints
+                                      + subject.Module1MaxPoints
+                                      + subject.Module2MaxPoints
+                                      + subject.ExamMaxPoints;
+            }
+
+            return dbGroup;
         }
 
         public async Task<int> AddGroupAsync(AddGroupDto group)
@@ -188,7 +198,7 @@ namespace BusinessLogic.Services.Impl
                         Module1MaxPoints = subject.Module1TestMaxPoints,
                         Module2MaxPoints = subject.Module2TestMaxPoints,
                         ExamMaxPoints = subject.ExamMaxPoints,
-                        MaxPoints = subject.HomeworkInfos.Sum(info => info.MaxPoints)
+                        HomeworkPoints = subject.HomeworkInfos.Sum(homework => homework.MaxPoints)
                     }).OrderBy(subject => subject.SubjectName),
                     Students = group.Students.Select(student => new StudentDto
                     {

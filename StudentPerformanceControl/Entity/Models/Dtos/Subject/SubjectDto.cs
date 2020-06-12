@@ -12,8 +12,8 @@ namespace Entity.Models.Dtos.Subject
         public int Module1MaxPoints { get; set; }
         public int Module2MaxPoints { get; set; }
         public int ExamMaxPoints { get; set; }
-        public int NumberOfHomeworks { get; set; }
-        public int MaxPoints { get; set; }
+        public int HomeworkPoints { get; set; }
+        public int TotalPoints { get; set; }
 
         public string GroupName { get; set; }
         public string SubjectName { get; set; }

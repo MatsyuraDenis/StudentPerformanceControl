@@ -112,13 +112,13 @@ namespace Client.Controllers
         
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public async Task<ActionResult> EditSubject(SubjectDto subjectDto)
+        public async Task<ActionResult> EditSubject(SubjectTestDto subjectDto)
         {
             try
             {
-                await _subjectService.EditSubjectAsync(subjectDto);
+                await _subjectService.EditSubjectAsync(subjectDto.Subject);
                 
-                return RedirectToAction("Details", "Group", new {id = subjectDto.GroupId});
+                return RedirectToAction("Edit", "Group", new {groupId = subjectDto.Subject.GroupId});
             }
             catch(SPCException ex)
             {

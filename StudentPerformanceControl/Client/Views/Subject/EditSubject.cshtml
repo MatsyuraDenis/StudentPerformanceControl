@@ -1,4 +1,4 @@
-@model Entity.Models.Dtos.Subject.SubjectDto
+@model Entity.Models.Dtos.Subject.SubjectTestDto
 
 @{
     ViewBag.Title = "title";
@@ -6,27 +6,28 @@
 }
 
 <div class="container">
-    <h2>Edit subject @Model.SubjectName</h2>
+    <h2>Edit subject @Model.Subject.SubjectName</h2>
+    <h5>Homework total sum: @Model.HomeworkSum</h5>
     <hr />
     <div class="row">
         <div class="col-md-4">
             <form asp-action="EditSubject" asp-controller="Subject">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="ExamMaxPoints" class="control-label">Exam max</label>
-                    <input asp-for="ExamMaxPoints" class="form-control" />
+                    <label asp-for="Subject.ExamMaxPoints" class="control-label">Exam max</label>
+                    <input asp-for="Subject.ExamMaxPoints" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Module1MaxPoints" class="control-label">Exam max</label>
-                    <input asp-for="Module1MaxPoints" class="form-control" />
+                    <label asp-for="Subject.Module1MaxPoints" class="control-label">Exam max</label>
+                    <input asp-for="Subject.Module1MaxPoints" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="Module2MaxPoints" class="control-label">Exam max</label>
-                    <input asp-for="Module2MaxPoints" class="form-control" />
+                    <label asp-for="Subject.Module2MaxPoints" class="control-label">Exam max</label>
+                    <input asp-for="Subject.Module2MaxPoints" class="form-control" />
                 </div>
                 
-                @Html.HiddenFor(subject => subject.Id)
-                @Html.HiddenFor(subject => subject.GroupId)
+                @Html.HiddenFor(subject => subject.Subject.Id)
+                @Html.HiddenFor(subject => subject.Subject.GroupId)
                 <div>
                     <input type="submit" class="btn btn-primary" value="Submit"/>
                     <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Cancel</a> 

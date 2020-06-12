@@ -92,23 +92,35 @@ namespace BusinessLogic.Services.Impl
 
             await _repository.SaveContextAsync();
 
-            var subjectIds = await _repository.GetAll<Subject>()
+            var subjectHomeworksIds = await _repository.GetAll<Subject>()
                 .Where(subject => subject.GroupId == student.GroupId)
-                .Select(subject => subject.SubjectId)
+                .Select(subject => new
+                {
+                    SubjectId = subject.SubjectId,
+                    HomeworkIds = subject.HomeworkInfos.Select(homework => homework.HomeworkInfoId)
+                })
                 .ToListAsync();
 
-            foreach (var subjectId in subjectIds)
-            {
-                _repository.Add(new StudentPerformance
+            var studentPerformances = subjectHomeworksIds.Select(subject => new StudentPerformance
                 {
-                    SubjectId = subjectId,
+                    SubjectId = subject.SubjectId,
                     ExamPoints = 0,
                     Module1TestPoints = 0,
                     Module2TestPoints = 0,
-                    StudentId = student.StudentId
-                });
-            }
+                    StudentId = student.StudentId,
+                    HomeworkResults = subject.HomeworkIds.Select(homework => new HomeworkResult
+                    {
+                        Points = 0,
+                        HomeworkInfoId = homework
+                    }).ToList()
+                })
+                .ToList();
 
+            foreach (var studentPerformance in studentPerformances)
+            {
+                _repository.Add(studentPerformance);
+            }
+            
             await _repository.SaveContextAsync();
         }
 

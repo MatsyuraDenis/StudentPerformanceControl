@@ -44,11 +44,13 @@ namespace Client.Controllers
             }
         }
 
-        public ActionResult Create(int subjectId)
+        public async Task<ActionResult> Create(int subjectId, int groupId)
         {
             var homework = new NewHomeworkDto
             {
-                SubjectId = subjectId
+                SubjectId = subjectId,
+                GroupId = groupId,
+                DataDto = await _homeworkService.GetCreateHomeworkDataAsync(subjectId)
             };
             return View(homework);
         }
@@ -58,12 +60,13 @@ namespace Client.Controllers
         public async Task<ActionResult> Create(NewHomeworkDto homeworkDto)
         {
             await _homeworkService.CreateHomeworkAsync(homeworkDto);
-            return RedirectToAction("Edit", "Subject", new {subjectId = homeworkDto.SubjectId});
+            return RedirectToAction("Edit", "Group", new {groupId = homeworkDto.GroupId});
         }
 
-        public ActionResult Edit(HomeworkDto homeworkDto)
+        public async Task<ActionResult> Edit(int homeworkId)
         {
-            return View(homeworkDto);
+            var homework = await _homeworkService.GetHomeworkDtoAsync(homeworkId);
+            return View(homework);
         }
 
         [HttpPost]
@@ -73,7 +76,7 @@ namespace Client.Controllers
             try
             {
                 await _homeworkService.EditHomeworkAsync(homeworkDto);
-                return RedirectToAction("Details", "Subject", new {id = homeworkDto.SubjectId} );
+                return RedirectToAction("Index", "Homework", new {subjectId = homeworkDto.SubjectId} );
             }
             catch (SPCException ex)
             {
@@ -85,12 +88,12 @@ namespace Client.Controllers
             }
         }
         
-        public async Task<ActionResult> Delete(HomeworkDto homeworkDto)
+        public async Task<ActionResult> Delete(int homeworkId, int subjectId)
         {
             try
             {
-                await _homeworkService.DeleteHomeworkAsync(homeworkDto.HomeworkId);
-                return RedirectToAction("Details", "Subject", new {id = homeworkDto.SubjectId} );
+                await _homeworkService.DeleteHomeworkAsync(homeworkId);
+                return RedirectToAction("Index", "Homework", new {subjectId = subjectId} );
             }
             catch (SPCException ex)
             {
