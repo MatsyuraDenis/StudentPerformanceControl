@@ -21,6 +21,10 @@ namespace DataCore.EntityConfigurations
             builder.HasMany(subject => subject.StudentPerformances)
                 .WithOne(performance => performance.Subject)
                 .HasForeignKey(performance => performance.SubjectId);
+            
+            builder.HasMany(subject => subject.HomeworkInfos)
+                .WithOne(homework => homework.Subject)
+                .HasForeignKey(homework => homework.SubjectId);
         }
     }
 }

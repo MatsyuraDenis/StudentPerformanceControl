@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataCore.Migrations
 {
     [DbContext(typeof(SPCContext))]
-    [Migration("20200612171745_Rename_SubjectSettingsId_to_subjectId")]
+    [Migration("20200612175045_Rename_SubjectSettingsId_to_subjectId")]
     partial class Rename_SubjectSettingsId_to_subjectId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

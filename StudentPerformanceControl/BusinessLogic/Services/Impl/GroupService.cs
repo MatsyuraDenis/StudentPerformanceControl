@@ -188,7 +188,7 @@ namespace BusinessLogic.Services.Impl
                         Module1MaxPoints = subject.Module1TestMaxPoints,
                         Module2MaxPoints = subject.Module2TestMaxPoints,
                         ExamMaxPoints = subject.ExamMaxPoints,
-                        MaxPoints =  subject.ExamMaxPoints
+                        MaxPoints = subject.HomeworkInfos.Sum(info => info.MaxPoints)
                     }).OrderBy(subject => subject.SubjectName),
                     Students = group.Students.Select(student => new StudentDto
                     {
