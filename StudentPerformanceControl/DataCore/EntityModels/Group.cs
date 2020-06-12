@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DataCore.EntityModels
@@ -8,6 +9,8 @@ namespace DataCore.EntityModels
         public string GroupName { get; set; }
         public int CuratorId { get; set; }
         public int GroupTypeId { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? DeactivatedAt { get; set; }
         
         public Teacher Curator { get; set; }
         public GroupType GroupType { get; set; }

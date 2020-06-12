@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,8 @@ namespace BusinessLogic.Services.Impl
                 .Select(group => new GroupDto
                 {
                     Id = group.GroupId,
+                    CreatedAt = group.CreatedAt,
+                    DeactivatedAt = group.DeactivatedAt,
                     Type = group.GroupTypeId,
                     Title = group.GroupName
                 })
@@ -84,7 +87,8 @@ namespace BusinessLogic.Services.Impl
             var newGroup = new Group
             {
                 GroupTypeId = (int) GroupTypes.Created,
-                GroupName = dbGroup.GroupName
+                GroupName = dbGroup.GroupName,
+                CreatedAt = DateTime.UtcNow
             };
             
             _repository.Add(newGroup);
@@ -98,6 +102,7 @@ namespace BusinessLogic.Services.Impl
             }
 
             dbGroup.GroupTypeId = (int) GroupTypes.Former;
+            dbGroup.DeactivatedAt = DateTime.UtcNow;
             
             _repository.Update(dbGroup);
 
@@ -111,6 +116,7 @@ namespace BusinessLogic.Services.Impl
             var dbGroup = await _repository.GetAll<Group>()
                 .SingleOrDefaultAsync(g => g.GroupId == groupId);
 
+            dbGroup.CreatedAt = DateTime.UtcNow;
             dbGroup.GroupTypeId = (int) GroupTypes.Active;
 
             _repository.Update(dbGroup);
@@ -123,6 +129,7 @@ namespace BusinessLogic.Services.Impl
             var dbGroup = await _repository.GetAll<Group>()
                 .SingleOrDefaultAsync(group => group.GroupId == groupId);
 
+            dbGroup.DeactivatedAt = DateTime.UtcNow;
             dbGroup.GroupTypeId = (int) GroupTypes.Former;
             
             _repository.Update(dbGroup);
@@ -142,6 +149,8 @@ namespace BusinessLogic.Services.Impl
                     Id = group.GroupId,
                     Title = group.GroupName,
                     Type = group.GroupTypeId,
+                    CreatedAt = group.CreatedAt,
+                    DeactivatedAt = group.DeactivatedAt,
                     Subjects = group.Subjects.Select(subject => new SubjectDto
                     {
                         Id = subject.SubjectId,
