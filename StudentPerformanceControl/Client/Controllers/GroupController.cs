@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BusinessLogic.Services;
+using DataCore.EntityModels;
 using DataCore.Exceptions;
 using Entity.Models.Dtos;
 using Entity.Models.Dtos.Group;
+using Entity.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -34,9 +36,9 @@ namespace Client.Controllers
         #region Methods
         
         // GET: Group
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(GroupTypes groupType =  GroupTypes.Active)
         {
-            var groups = await _groupService.GetGroupsAsync();
+            var groups = await _groupService.GetGroupsAsync((int)groupType);
             return View(groups);
         }
 
@@ -96,6 +98,10 @@ namespace Client.Controllers
             {
                 await _groupService.DeactivateGroupAsync(id);
                 return RedirectToAction(nameof(Index));
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
             }
             catch
             {

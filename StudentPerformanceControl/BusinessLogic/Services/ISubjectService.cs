@@ -9,8 +9,11 @@ namespace BusinessLogic.Services
     {
         Task<SubjectPerformanceInfoDto>  GetSubjectPerformanceInfoAsync(int subjectId);
         Task CreateSubjectAsync(NewSubjectDto subjectDto);
+        Task EditSubjectAsync(NewSubjectDto subjectDto);
         Task RemoveSubjectAsync(int subjectId);
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync();
+        Task CreateSubjectInfoAsync(SubjectInfoDto subjectInfoDto);
+        Task EditSubjectInfoAsync(SubjectInfoDto subjectInfoDto);
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync(int groupId);
     }
 }

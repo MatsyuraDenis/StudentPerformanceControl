@@ -5,6 +5,8 @@ namespace BusinessLogic.Services
 {
     public interface IHomeworkService
     {
-        Task CreateHomework(NewHomeworkDto homeworkDto);
+        Task CreateHomeworkAsync(NewHomeworkDto homeworkDto);
+        Task EditHomeworkAsync(HomeworkDto homeworkDto);
+        Task DeleteHomeworkAsync(int homeworkId);
     }
 }

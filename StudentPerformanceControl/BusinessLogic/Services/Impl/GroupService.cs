@@ -34,12 +34,12 @@ namespace BusinessLogic.Services.Impl
 
         #region Implementation
         
-        public async Task<IList<GroupDto>> GetGroupsAsync()
+        public async Task<IList<GroupDto>> GetGroupsAsync(int groupType)
         {
             _logService.LogInfo("Start loading groups");
             
             var groups = await _repository.GetAll<Group>()
-                .Where(group => group.GroupTypeId == (int) GroupTypes.Active)
+                .Where(group => group.GroupTypeId == groupType)
                 .Select(group => new GroupDto
                 {
                     Id = group.GroupId,

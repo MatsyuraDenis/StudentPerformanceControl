@@ -1,0 +1,30 @@
+@model IEnumerable<Entity.Models.Dtos.Subject.SubjectInfoDto>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+    var number = 1;
+}
+
+<a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="SubjectInfo">Create new</a>
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Number</th>
+        <th>Title</th>
+        <th>Groups learn</th>
+        <th>Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var subject in Model)
+    {
+        <tr>
+            <td>@number</td>
+            <td>@subject.Title</td>
+            <td>@subject.GroupLearn</td>
+            <td><a asp-action="Edit" asp-controller="SubjectInfo" asp-route-subjectInfoDto="@subject">Edit</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

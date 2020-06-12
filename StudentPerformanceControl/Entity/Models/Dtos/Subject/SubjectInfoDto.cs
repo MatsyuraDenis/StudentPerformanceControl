@@ -6,6 +6,6 @@ namespace Entity.Models.Dtos.Subject
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public int GroupUsed { get; set; }
+        public int GroupLearn { get; set; }
     }
 }

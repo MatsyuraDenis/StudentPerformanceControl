@@ -22,7 +22,20 @@
             <tr>
                 <td> @index </td>
                 <td> @group.Title </td>
-                <td><a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a></td>
+                <td>
+                    @if (group.Type == (int) GroupTypes.Active)
+                    {
+                        <a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a>
+                    }
+                    else if (group.Type == (int) GroupTypes.Created)
+                    {
+                        <a asp-controller="Group" asp-action="Edit" asp-route-id="@group.Id">Edit</a>
+                    }
+                    else
+                    {
+                        <p>Former group</p>
+                    }
+                </td>
                 <td>
                     <a asp-action="Deactivate" asp-controller="Group" asp-route-id="@group.Id">Deactivate</a>
                 </td>

@@ -9,15 +9,16 @@
 <h1>@Model.Title</h1>
 
 <div class="m-1">
-    <h3 class="m-1"> Subject </h3>
+    <h3 class="m-1"> Subject <a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Subject" asp-route-groupId="@Model.Id">Add subject</a></h3>
+    
         <table class="table table-striped">
-            <thead class="thead-dark">
+            <thead>
             <tr>
                 <th>Number</th>
                 <th>Title</th>
+                <td>Edit</td>
                 <th>Delete</th>
             </tr>
-            <tr><a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Subject" asp-route-groupId="@Model.Id">Add subject</a></tr>
             </thead>
             <tbody>
                 @foreach (var subject in Model.Subjects)
@@ -25,7 +26,7 @@
                     <tr>
                         <td>@subjectIndex</td>
                         <td>@subject.SubjectName</td>
-                        <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject.Id">Details</a></td>
+                        <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject.Id" asp-route-groupId="@Model.Id">Delete</a></td>
                     </tr>
                     subjectIndex++;
                 }
@@ -34,15 +35,17 @@
 </div>
 
 <div>
-    <h3 class="m-1"> Students </h3>
+    <h3 class="m-1"> Students <a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Student" asp-route-groupId="@Model.Id">Add student</a> </h3>
+    
     <table class="table table-striped">
-        <thead class="thead-dark">
+        <thead>
         <tr>
             <th>Number</th>
             <th>SecondName</th>
             <th>Name</th>
+            <th>Delete</th>
         </tr>
-        <tr><td><a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Student" asp-route-groupId="@Model.Id">Add student</a></td></tr>
+        <tr></tr>
         </thead>
         <tbody>
         @foreach (var student in Model.Students)
@@ -51,6 +54,7 @@
                 <td>@studentIndex</td>
                 <td>@student.SecondName</td>
                 <td>@student.Name</td>
+                <td> <a asp-action="Delete" asp-controller="Student" asp-route-id="@student.Id" asp-route-groupId="@student.GroupId"></a> </td>
             </tr>
             studentIndex++;
         }

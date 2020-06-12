@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using DataCore.EntityModels;
+using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos.Homeworks;
@@ -17,22 +18,28 @@ namespace BusinessLogic.Services.Impl
             _repository = repositoryFactory.GetMsSqlRepository();
         }
         
-        public async Task CreateHomework(NewHomeworkDto homeworkDto)
+        public async Task CreateHomeworkAsync(NewHomeworkDto homeworkDto)
         {
-            var homework = new HomeworkInfo
+            var number = await _repository.GetAll<HomeworkInfo>()
+                .Where(homework => homework.SubjectSettingId == homeworkDto.SubjectSettingsId)
+                .CountAsync();
+
+            number++;
+            
+            var dbHomework = new HomeworkInfo
             {
                 SubjectSettingId = homeworkDto.SubjectSettingsId,
                 MaxPoints = homeworkDto.MaxPoints,
-                Number = homeworkDto.HomeworkNumber,
+                Number = number,
                 Title = homeworkDto.HomeworkTitle
             };
             
-            _repository.Add(homework);
+            _repository.Add(dbHomework);
 
             await _repository.SaveContextAsync();
 
             var studentPerformanceIds = await _repository.GetAll<StudentPerformance>()
-                .Where(performance => performance.Subject.SubjectSetting.SubjectSettingId == homework.SubjectSettingId)
+                .Where(performance => performance.Subject.SubjectSetting.SubjectSettingId == dbHomework.SubjectSettingId)
                 .Select(performance => performance.StudentPerformanceId)
                 .ToListAsync();
 
@@ -40,11 +47,37 @@ namespace BusinessLogic.Services.Impl
             {
                 _repository.Add(new HomeworkResult
                 {
-                    HomeworkInfoId = homework.HomeworkInfoId,
+                    HomeworkInfoId = dbHomework.HomeworkInfoId,
                     StudentPerformanceId = studentPerformanceId,
                     Points = 0
                 });
             }
+
+            await _repository.SaveContextAsync();
+        }
+
+        public async Task EditHomeworkAsync(HomeworkDto homeworkDto)
+        {
+            var dbHomework = await _repository.GetAll<HomeworkInfo>()
+                                 .SingleOrDefaultAsync(info => info.HomeworkInfoId == homeworkDto.HomeworkId)
+                             ?? throw new SPCException($"Homework with id {homeworkDto.HomeworkId} is not exists", 404);
+
+            dbHomework.Title = homeworkDto.HomeworkTitle;
+            dbHomework.MaxPoints = homeworkDto.MaxPoints;
+            
+            _repository.Update(dbHomework);
+
+            await _repository.SaveContextAsync();
+
+        }
+
+        public async Task DeleteHomeworkAsync(int homeworkId)
+        {
+            var dbHomework = await _repository.GetAll<HomeworkInfo>()
+                                 .SingleOrDefaultAsync(info => info.HomeworkInfoId == homeworkId)
+                             ?? throw new SPCException($"Homework with id {homeworkId} is not exists", 404);
+
+            _repository.Delete(dbHomework);
 
             await _repository.SaveContextAsync();
         }

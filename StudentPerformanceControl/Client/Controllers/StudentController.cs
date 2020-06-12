@@ -40,9 +40,13 @@ namespace Client.Controllers
 
                 return RedirectToAction("Edit", "Group", new {groupId = studentDto.GroupId});
             }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
             catch
             {
-                return View();
+                return View("Error");
             }
         }
         

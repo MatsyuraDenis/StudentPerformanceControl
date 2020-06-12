@@ -7,6 +7,7 @@ using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos.PerformanceInfos;
 using Entity.Models.Dtos.Subject;
+using Entity.Models.Enums;
 using Logger;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -137,6 +138,20 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task EditSubjectAsync(NewSubjectDto subjectDto)
+        {
+            var dbSubject = await _repository.GetAll<SubjectSetting>()
+                .SingleOrDefaultAsync(subject => subject.SubjectId == subjectDto.Id);
+            
+            dbSubject.Module1TestMaxPoints = subjectDto.Module1MaxPoints;
+            dbSubject.Module2TestMaxPoints = subjectDto.Module2MaxPoints;
+            dbSubject.ExamMaxPoints = subjectDto.ExamMaxPoints;
+
+            _repository.Update(dbSubject);
+            
+            await _repository.SaveContextAsync();
+        }
+
         public async Task RemoveSubjectAsync(int subjectId)
         {
             var dbSubject = await _repository.GetAll<Subject>()
@@ -155,11 +170,36 @@ namespace BusinessLogic.Services.Impl
                 {
                     Id = info.SubjectInfoId,
                     Title = info.Title,
-                    GroupUsed = _repository.GetAll<Group>()
-                        .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId))
+                    GroupLearn = _repository.GetAll<Group>()
+                        .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId)
+                            && group.GroupTypeId == (int) GroupTypes.Active)
                         .Count()
                 })
                 .ToListAsync();
+        }
+
+        public async Task CreateSubjectInfoAsync(SubjectInfoDto subjectInfoDto)
+        {
+            _repository.Add(new SubjectInfo
+            {
+                Title = subjectInfoDto.Title
+            });
+
+            await _repository.SaveContextAsync();
+        }
+
+        public async Task EditSubjectInfoAsync(SubjectInfoDto subjectInfoDto)
+        {
+            var dbSubject = await _repository.GetAll<SubjectInfo>()
+                                .Where(info => info.SubjectInfoId == subjectInfoDto.Id)
+                                .SingleOrDefaultAsync()
+                            ?? throw new SPCException($"Subject info with id {subjectInfoDto.Id} not exists", 404);
+
+            dbSubject.Title = subjectInfoDto.Title;
+            
+            _repository.Update(dbSubject);
+
+            await _repository.SaveContextAsync();
         }
 
         public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync(int groupId)
@@ -170,7 +210,7 @@ namespace BusinessLogic.Services.Impl
                 {
                     Id = info.SubjectInfoId,
                     Title = info.Title,
-                    GroupUsed = _repository.GetAll<Group>()
+                    GroupLearn = _repository.GetAll<Group>()
                         .Where(group => group.Subjects.Any(subject => subject.SubjectInfoId == info.SubjectInfoId))
                         .Count()
                 })

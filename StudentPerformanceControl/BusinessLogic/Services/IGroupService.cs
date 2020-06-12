@@ -8,7 +8,7 @@ namespace BusinessLogic.Services
 {
     public interface IGroupService
     {
-        Task<IList<GroupDto>> GetGroupsAsync();
+        Task<IList<GroupDto>> GetGroupsAsync(int groupType);
         Task<GroupDto> GetGroupAsync(int groupId);
         Task<int> AddGroupAsync(AddGroupDto group);
         Task SaveAsync(int groupId);
