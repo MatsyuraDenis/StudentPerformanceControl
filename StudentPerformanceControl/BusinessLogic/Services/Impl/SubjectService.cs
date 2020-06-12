@@ -6,6 +6,7 @@ using DataCore.EntityModels;
 using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
+using Entity.Models.Dtos.Homeworks;
 using Entity.Models.Dtos.PerformanceInfos;
 using Entity.Models.Dtos.Subject;
 using Entity.Models.Enums;
@@ -52,11 +53,13 @@ namespace BusinessLogic.Services.Impl
                         Module1MaxPoints = subject.SubjectSetting.Module1TestMaxPoints,
                         Module2MaxPoints = subject.SubjectSetting.Module2TestMaxPoints,
                         ExamMaxPoint = subject.SubjectSetting.ExamMaxPoints,
-                        HomeworkSettings = subject.SubjectSetting.HomeworkInfos.Select(info => new HomeworkSettingDto
+                        HomeworkInfos = subject.SubjectSetting.HomeworkInfos.Select(info => new HomeworkDto
                         {
                             HomeworkId = info.HomeworkInfoId,
                             MaxPoints = info.MaxPoints,
-                            HomeworkNumber = info.Number
+                            SubjectId = subject.SubjectId,
+                            Number = info.Number,
+                            HomeworkTitle = info.Title
                         })
                     },
                     StudentPerformances = subject.StudentPerformances.Select(performance => new StudentPerformanceDto
@@ -95,36 +98,53 @@ namespace BusinessLogic.Services.Impl
             return dbSubject;
         }
 
-        public async Task CreateSubjectAsync(NewSubjectDto subjectDto)
+        public async Task<SubjectDto> GetSubjectAsync(int subjectId)
+        {
+            return await _repository.GetAll<Subject>()
+                       .Where(subject => subject.SubjectId == subjectId)
+                       .Select(subject => new SubjectDto
+                       {
+                           Id = subject.SubjectId,
+                           SubjectSettingId = subject.SubjectSettingId,
+                           GroupId = subject.GroupId,
+                           SubjectInfoId = subject.SubjectInfoId,
+                           ExamMaxPoints = subject.SubjectSetting.ExamMaxPoints,
+                           Module1MaxPoints = subject.SubjectSetting.Module1TestMaxPoints,
+                           Module2MaxPoints = subject.SubjectSetting.Module2TestMaxPoints,
+                           NumberOfHomeworks = subject.SubjectSetting.HomeworkInfos.Count(),
+                           MaxPoints = subject.SubjectSetting.ExamMaxPoints +
+                                       subject.SubjectSetting.Module1TestMaxPoints +
+                                       subject.SubjectSetting.Module2TestMaxPoints +
+                                       subject.SubjectSetting.HomeworkInfos.Sum(homework => homework.MaxPoints)
+                       })
+                       .SingleOrDefaultAsync()
+                   ?? throw new SPCException($"Subject with id {subjectId} does not exists in database", 404);
+        }
+
+        public async Task CreateSubjectAsync(SubjectDto subjectDto)
         {
             var subject = new Subject
             {
                 GroupId = subjectDto.GroupId,
-                SubjectInfoId = subjectDto.SubjectInfoId
+                SubjectInfoId = subjectDto.SubjectInfoId,
+                SubjectSetting = new SubjectSetting
+                {
+                    Module1TestMaxPoints = subjectDto.Module1MaxPoints,
+                    Module2TestMaxPoints = subjectDto.Module2MaxPoints,
+                    ExamMaxPoints = subjectDto.ExamMaxPoints,
+                    SubjectId = subjectDto.Id
+                }
             };
             
             _repository.Add(subject);
 
             await _repository.SaveContextAsync();
-
-            var subjectSettings = new SubjectSetting
-            {
-                Module1TestMaxPoints = subjectDto.Module1MaxPoints,
-                Module2TestMaxPoints = subjectDto.Module2MaxPoints,
-                ExamMaxPoints = subjectDto.ExamMaxPoints,
-                SubjectId = subject.SubjectId
-            };
-            
-            _repository.Add(subjectSettings);
-            
-            await _repository.SaveContextAsync();
-
             
             var studentIds = await _repository.GetAll<Student>()
                 .Where(student => student.GroupId == subjectDto.GroupId)
                 .Select(student => student.StudentId)
                 .ToListAsync();
-            
+
             foreach (var studentId in studentIds)
             {
                 _repository.Add(new StudentPerformance
@@ -140,7 +160,7 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
-        public async Task EditSubjectAsync(NewSubjectDto subjectDto)
+        public async Task EditSubjectAsync(SubjectDto subjectDto)
         {
             var dbSubject = await _repository.GetAll<SubjectSetting>()
                 .SingleOrDefaultAsync(subject => subject.SubjectId == subjectDto.Id);

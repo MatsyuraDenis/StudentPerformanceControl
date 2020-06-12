@@ -34,9 +34,13 @@
                 {
                     <td><a asp-controller="Group" asp-action="Details" asp-route-id="@group.Id">Details</a></td>
                 }
-                @if (@group.Type == (int) GroupTypes.Active)
+                @if (group.Type == (int) GroupTypes.Active)
                 {
                     <td><a asp-action="Deactivate" asp-controller="Group" asp-route-id="@group.Id">Deactivate</a></td>
+                }
+                else if(group.Type == (int) GroupTypes.Created)
+                {
+                    <td><a asp-action="Delete" asp-controller="Group" asp-route-id="@group.Id">Deactivate</a></td>
                 }
                 else
                 {

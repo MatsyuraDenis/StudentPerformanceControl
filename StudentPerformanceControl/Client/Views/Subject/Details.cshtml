@@ -4,16 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-<a href="##" onClick="history.go(-1); return false;" class="btn btn-primary"> Back</a> 
+@if (Model.GroupType == (int) GroupTypes.Created)
+{
+    <a asp-controller="Homework" asp-action="Create" asp-route-subjectSettingId="@Model.SubjectSettings.SubjectSettingId" 
+       asp-route-subjectId="@Model.SubjectId" class="btn btn-sm btn-primary">Add homework</a>
+}
 
 <div>
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>Student</th>
-            @foreach (var setting in Model.SubjectSettings.HomeworkSettings)
+            @foreach (var setting in Model.SubjectSettings.HomeworkInfos)
             {
-                <th>@setting.HomeworkNumber</th>
+                <th>@setting.Number</th>
             }
             <th>Module 1</th>
             <th>Module 2</th>
@@ -46,5 +50,9 @@
         }
         </tbody>
     </table>
+    
+    <div>
+        <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Back</a>
+    </div>
 </div>
 

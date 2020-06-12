@@ -1,0 +1,28 @@
+@model IEnumerable<Entity.Models.Dtos.Homeworks.HomeworkDto>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Number</th>
+        <th>Title</th>
+        <th>MaxPoints</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var homework in Model)
+    {
+        <tr>@homework.Number</tr>
+        <tr>@homework.HomeworkTitle</tr>
+        <tr>@homework.MaxPoints</tr>
+        <tr><a asp-action="Edit" asp-controller="Homework" asp-route-homeworkDto="@homework">Edit</a></tr>
+        <tr><a asp-action="Delete" asp-controller="Homework" asp-route-homeworkDto="@homework">Edit</a></tr>
+    }
+    </tbody>
+</table>

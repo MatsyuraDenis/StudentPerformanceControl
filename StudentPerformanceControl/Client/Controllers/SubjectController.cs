@@ -52,7 +52,7 @@ namespace Client.Controllers
         // GET: Subject/Create
         public async Task<ActionResult> Create(int groupId)
         {
-            var subject = new NewSubjectDto
+            var subject = new SubjectDto
             {
                 GroupId = groupId
             };
@@ -65,7 +65,7 @@ namespace Client.Controllers
         // POST: Subject/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(NewSubjectDto subject)
+        public async Task<ActionResult> Create(SubjectDto subject)
         {
             try
             {
@@ -90,9 +90,48 @@ namespace Client.Controllers
             return View(performance);
         }
 
+        public async Task<ActionResult> EditSubject(int subjectId)
+        {
+            try
+            {
+                var subject = await _subjectService.GetSubjectAsync(subjectId);
+                
+                return View(subject);
+            }
+            catch(SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch(Exception ex)
+            {
+                return View("Error");
+            }
+        }
+        
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> EditSubject(SubjectDto subjectDto)
+        {
+            try
+            {
+                await _subjectService.EditSubjectAsync(subjectDto);
+                
+                return RedirectToAction("Details", "Group", new {id = subjectDto.GroupId});
+            }
+            catch(SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch(Exception ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, 500));
+            }
+        }
+        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditSubject(StudentPerformanceDto studentPerformance)
+        public async Task<ActionResult> EditSubjectPerformance(StudentPerformanceDto studentPerformance)
         {
             try
             {

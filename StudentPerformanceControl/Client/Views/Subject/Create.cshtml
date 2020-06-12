@@ -1,11 +1,9 @@
-@model Entity.Models.Dtos.Subject.NewSubjectDto
+@model Entity.Models.Dtos.Subject.SubjectDto
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 }
-
-<a href="##" onClick="history.go(-1); return false;" class="btn btn-primary"> Back</a> 
 
 <div class="container">
     <h2>Create subject</h2>
@@ -32,7 +30,10 @@
                 </div>
                 @Html.HiddenFor(subject => subject.SubjectInfoId)
                 @Html.HiddenFor(subject => subject.GroupId)
-                <input type="submit" class="btn btn-primary" value="Submit"/>
+                <div>
+                    <input type="submit" class="btn btn-primary" value="Submit"/>
+                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Back</a>
+                </div>
             </form>
             
         </div>

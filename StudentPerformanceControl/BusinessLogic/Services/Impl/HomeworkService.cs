@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataCore.EntityModels;
@@ -71,6 +72,21 @@ namespace BusinessLogic.Services.Impl
                    ?? throw new SPCException($"Homework with id {homeworkId} does not exists", 404);
         }
 
+        public async Task<IList<HomeworkDto>> GetHomeworksAsync(int subjectId)
+        {
+            return await _repository.GetAll<HomeworkInfo>()
+                .Where(homework => homework.SubjectSetting.SubjectId == subjectId)
+                .Select(homework => new HomeworkDto
+                {
+                    HomeworkId = homework.HomeworkInfoId,
+                    HomeworkTitle = homework.Title,
+                    Number = homework.Number,
+                    MaxPoints = homework.MaxPoints,
+                    SubjectId = homework.SubjectSetting.SubjectId
+                })
+                .ToListAsync();
+        }
+
         public async Task EditHomeworkAsync(HomeworkDto homeworkDto)
         {
             var dbHomework = await _repository.GetAll<HomeworkInfo>()
@@ -92,6 +108,15 @@ namespace BusinessLogic.Services.Impl
                                  .SingleOrDefaultAsync(info => info.HomeworkInfoId == homeworkId)
                              ?? throw new SPCException($"Homework with id {homeworkId} is not exists", 404);
 
+            var dbHomeworkResults = await _repository.GetAll<HomeworkResult>()
+                .Where(result => result.HomeworkInfoId == homeworkId)
+                .ToListAsync();
+
+            foreach (var dbHomeworkResult in dbHomeworkResults)
+            {
+                _repository.Delete(dbHomeworkResult);
+            }
+            
             _repository.Delete(dbHomework);
 
             await _repository.SaveContextAsync();

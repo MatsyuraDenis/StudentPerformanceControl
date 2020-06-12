@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entity.Models.Dtos.Homeworks;
 
 namespace Entity.Models.Dtos.PerformanceInfos
 {
@@ -8,6 +9,6 @@ namespace Entity.Models.Dtos.PerformanceInfos
         public int Module1MaxPoints { get; set; }
         public int Module2MaxPoints { get; set; }
         public int ExamMaxPoint { get; set; }
-        public IEnumerable<HomeworkSettingDto> HomeworkSettings { get; set; }
+        public IEnumerable<HomeworkDto> HomeworkInfos { get; set; }
     }
 }

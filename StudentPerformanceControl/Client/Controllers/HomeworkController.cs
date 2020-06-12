@@ -27,21 +27,39 @@ namespace Client.Controllers
 
         #region Methods
 
-        public ActionResult Create(int subjectSettingId)
+        public async Task<IActionResult> Index(int subjectId)
+        {
+            try
+            {
+                var homeworks = await _homeworkService.GetHomeworksAsync(subjectId);
+                return View();
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch (Exception ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, 500));
+            }
+        }
+
+        public ActionResult Create(int subjectSettingId, int subjectId)
         {
             var homework = new NewHomeworkDto
             {
-                SubjectSettingsId = subjectSettingId
+                SubjectSettingsId = subjectSettingId,
+                SubjectId = subjectId
             };
             return View(homework);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(NewHomeworkDto homeworkDto, int subjectId)
+        public async Task<ActionResult> Create(NewHomeworkDto homeworkDto)
         {
             await _homeworkService.CreateHomeworkAsync(homeworkDto);
-            return RedirectToAction("Edit", "Subject", new {subjectId =  subjectId});
+            return RedirectToAction("Edit", "Subject", new {subjectId = homeworkDto.SubjectId});
         }
 
         public ActionResult Edit(HomeworkDto homeworkDto)

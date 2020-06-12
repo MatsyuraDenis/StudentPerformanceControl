@@ -8,8 +8,9 @@ namespace BusinessLogic.Services
     public interface ISubjectService
     {
         Task<SubjectPerformanceInfoDto>  GetSubjectPerformanceInfoAsync(int subjectId);
-        Task CreateSubjectAsync(NewSubjectDto subjectDto);
-        Task EditSubjectAsync(NewSubjectDto subjectDto);
+        Task<SubjectDto> GetSubjectAsync(int subjectId);
+        Task CreateSubjectAsync(SubjectDto subjectDto);
+        Task EditSubjectAsync(SubjectDto subjectDto);
         Task DeleteSubjectInfoAsync(int subjectInfoId);
         Task RemoveSubjectAsync(int subjectId);
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync();

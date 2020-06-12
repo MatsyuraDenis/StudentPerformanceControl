@@ -36,7 +36,7 @@ namespace Client.Controllers
         #region Methods
         
         // GET: Group
-        public async Task<ActionResult> Index(GroupTypes groupType =  GroupTypes.Active)
+        public async Task<ActionResult> Index(GroupTypes groupType = GroupTypes.Active)
         {
             var groups = await _groupService.GetGroupsAsync((int)groupType);
             return View(groups);
@@ -107,6 +107,23 @@ namespace Client.Controllers
             {
                 await _groupService.DeactivateGroupAsync(id);
                 return RedirectToAction(nameof(Index));
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
+
+        public async Task<ActionResult> Delete(int groupId)
+        {
+            try
+            {
+                await _groupService.DeleteGroupAsync(groupId);
+                return RedirectToAction("Index", new {groupType = GroupTypes.Created} );
             }
             catch (SPCException ex)
             {

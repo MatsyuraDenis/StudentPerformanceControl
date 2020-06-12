@@ -3,14 +3,13 @@
     ViewData["Title"] = "Edit";
 }
 
-<a href="##" onClick="history.go(-1); return false;" class="btn btn-primary"> Back</a> 
 
 <div class="container">
     <h2>Edit student performance</h2>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="EditSubject" asp-controller="Subject">
+            <form asp-action="EditSubjectPerformance" asp-controller="Subject">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Module1Result" class="control-label">Module 1 test</label>
@@ -48,7 +47,10 @@
                 @Html.HiddenFor(g=>g.TotalPoints)
                 @Html.HiddenFor(g=>g.Homeworks)
                 
-                <input type="submit" class="form-control" value="Submit"/>
+                <div>
+                    <input type="submit" class="form-control" value="Submit"/>
+                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Back</a> 
+                </div>
             </form>
             
         </div>

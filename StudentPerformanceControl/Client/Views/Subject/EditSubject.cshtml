@@ -1,0 +1,37 @@
+@model Entity.Models.Dtos.Subject.SubjectDto
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="container">
+    <h2>Edit subject @Model.SubjectName</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditSubject" asp-controller="Subject">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ExamMaxPoints" class="control-label">Exam max</label>
+                    <input asp-for="ExamMaxPoints" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module1MaxPoints" class="control-label">Exam max</label>
+                    <input asp-for="Module1MaxPoints" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Module2MaxPoints" class="control-label">Exam max</label>
+                    <input asp-for="Module2MaxPoints" class="form-control" />
+                </div>
+                
+                @Html.HiddenFor(subject => subject.Id)
+                @Html.HiddenFor(subject => subject.GroupId)
+                <div>
+                    <input type="submit" class="btn btn-primary" value="Submit"/>
+                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Cancel</a> 
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

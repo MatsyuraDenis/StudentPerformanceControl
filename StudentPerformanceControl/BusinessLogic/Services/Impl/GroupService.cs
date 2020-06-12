@@ -9,6 +9,7 @@ using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos;
 using Entity.Models.Dtos.Group;
+using Entity.Models.Dtos.Subject;
 using Entity.Models.Enums;
 using Logger;
 using Microsoft.EntityFrameworkCore;
@@ -97,8 +98,13 @@ namespace BusinessLogic.Services.Impl
 
             foreach (var student in dbGroup.Students)
             {
-                student.GroupId = newGroup.GroupId;
-                _repository.Update(student);
+                _repository.Add(new Student
+                {
+                    CommonId = student.CommonId == 0 ? student.StudentId : student.CommonId,
+                    Name = student.Name,
+                    SecondName = student.SecondName,
+                    GroupId = newGroup.GroupId
+                });
             }
 
             dbGroup.GroupTypeId = (int) GroupTypes.Former;
@@ -137,6 +143,27 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task DeleteGroupAsync(int groupId)
+        {
+            var dbGroup = await _repository.GetAll<Group>()
+                              .Include(group => group.Students)
+                              .Include(group => group.Subjects)
+                              .SingleOrDefaultAsync(group => group.GroupId == groupId)
+                          ?? throw new SPCException($"Group with id {groupId} does not exists", 404);
+
+            foreach (var student in dbGroup.Students)
+            {
+                _repository.Delete(student);
+            }
+            
+            foreach (var subject in dbGroup.Subjects)
+            {
+                _repository.Delete(subject);
+            }
+
+            await _repository.SaveContextAsync();
+        }
+
         #endregion
 
         #region Private Methods
@@ -154,7 +181,10 @@ namespace BusinessLogic.Services.Impl
                     Subjects = group.Subjects.Select(subject => new SubjectDto
                     {
                         Id = subject.SubjectId,
-                        SubjectName = subject.SubjectInfo.Title
+                        SubjectName = subject.SubjectInfo.Title,
+                        Module1MaxPoints = subject.SubjectSetting.Module1TestMaxPoints,
+                        Module2MaxPoints = subject.SubjectSetting.Module2TestMaxPoints,
+                        ExamMaxPoints = subject.SubjectSetting.ExamMaxPoints
                     }).OrderBy(subject => subject.SubjectName),
                     Students = group.Students.Select(student => new StudentDto
                     {
