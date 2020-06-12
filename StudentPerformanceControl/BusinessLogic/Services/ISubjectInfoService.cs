@@ -7,6 +7,7 @@ namespace BusinessLogic.Services
     public interface ISubjectInfoService
     {
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync();
+        Task<SubjectInfoDto> GetSubjectInfoAsync(int subjectInfoId);
         Task CreateSubjectInfoAsync(SubjectInfoDto subjectInfoDto);
         Task EditSubjectInfoAsync(SubjectInfoDto subjectInfoDto);
         Task<IList<SubjectInfoDto>> GetSubjectInfosAsync(int groupId);

@@ -53,9 +53,10 @@ namespace Client.Controllers
             }
         }
 
-        public ActionResult Edit(SubjectInfoDto subjectInfoDto)
+        public async Task<ActionResult> Edit(int subjectInfoId)
         {
-            return View(subjectInfoDto);
+            var subject = await _subjectInfoService.GetSubjectInfoAsync(subjectInfoId);
+            return View(subject);
         }
 
         [HttpPost]

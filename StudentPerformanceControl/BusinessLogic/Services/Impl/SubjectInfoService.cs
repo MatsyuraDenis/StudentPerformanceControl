@@ -41,7 +41,7 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
- public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync()
+         public async Task<IList<SubjectInfoDto>> GetSubjectInfosAsync()
         {
             return await _repository.GetAll<SubjectInfo>()
                 .Select(info => new SubjectInfoDto
@@ -60,7 +60,20 @@ namespace BusinessLogic.Services.Impl
                 .ToListAsync();
         }
 
-        public async Task CreateSubjectInfoAsync(SubjectInfoDto subjectInfoDto)
+         public async Task<SubjectInfoDto> GetSubjectInfoAsync(int subjectInfoId)
+         {
+             return await _repository.GetAll<SubjectInfo>()
+                 .Where(subject => subject.SubjectInfoId == subjectInfoId)
+                 .Select(subject => new SubjectInfoDto
+                 {
+                     Id = subjectInfoId,
+                     Title = subject.Title
+                 })
+                 .SingleOrDefaultAsync()
+                    ?? throw new SPCException($"Subject info with id {subjectInfoId} does bot exists", 404);
+         }
+
+         public async Task CreateSubjectInfoAsync(SubjectInfoDto subjectInfoDto)
         {
             _repository.Add(new SubjectInfo
             {
