@@ -19,16 +19,16 @@ namespace Client.Controllers
         #region MyRegion
 
         private readonly IGroupService _groupService;
-        private readonly ISubjectService _subjectService;
+        private readonly ISubjectInfoService _subjectInfoService;
 
         #endregion
 
         #region ctor
 
-        public GroupController(IGroupService groupService, ISubjectService subjectService)
+        public GroupController(IGroupService groupService, ISubjectInfoService subjectInfoService)
         {
             _groupService = groupService;
-            _subjectService = subjectService;
+            _subjectInfoService = subjectInfoService;
         }
 
         #endregion
@@ -52,7 +52,7 @@ namespace Client.Controllers
         // GET: Group/Create
         public async Task<ActionResult> Create()
         {
-            ViewBag.Subjects = await _subjectService.GetSubjectInfosAsync();
+            ViewBag.Subjects = await _subjectInfoService.GetSubjectInfosAsync();
             return View();
         }
         

@@ -2,18 +2,19 @@
 @{
     ViewData["Title"] = "Create";
 }
-<a href="##" onClick="history.go(-1); return false;" class="btn btn-primary"> Back</a> 
 
-<h1>Create group</h1>
-<div class="container">
+
+<h3 class="ml-3">Create group</h3>
+<div class="col-md-4">
     <form asp-action="Create" asp-controller="Group" asp-antiforgery="true">
         <div>
-            <label asp-for="GroupName"></label>
-            <input asp-for="GroupName"/>
+            <label asp-for="GroupName" class="control-label">Group name</label>
+            <input asp-for="GroupName" class="form-control"/>
         </div>
-        <div>
-            <input type="submit" value="Next">
+        <div class="m-3">
+            <input type="submit" value="Next" class="btn btn-sm btn-success">
+            <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Cancel</a>
         </div>
-        </form>
+    </form>
 </div>
 

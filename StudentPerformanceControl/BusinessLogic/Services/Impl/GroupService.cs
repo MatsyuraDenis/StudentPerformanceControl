@@ -70,7 +70,8 @@ namespace BusinessLogic.Services.Impl
             var newGroup = new Group
             {
                 GroupName = group.GroupName,
-                GroupTypeId = (int) GroupTypes.Created
+                GroupTypeId = (int) GroupTypes.Created,
+                CreatedAt = DateTime.UtcNow
             };
             
             _repository.Add(newGroup);
@@ -161,6 +162,8 @@ namespace BusinessLogic.Services.Impl
                 _repository.Delete(subject);
             }
 
+            _repository.Delete(dbGroup);
+            
             await _repository.SaveContextAsync();
         }
 
@@ -184,7 +187,8 @@ namespace BusinessLogic.Services.Impl
                         SubjectName = subject.SubjectInfo.Title,
                         Module1MaxPoints = subject.SubjectSetting.Module1TestMaxPoints,
                         Module2MaxPoints = subject.SubjectSetting.Module2TestMaxPoints,
-                        ExamMaxPoints = subject.SubjectSetting.ExamMaxPoints
+                        ExamMaxPoints = subject.SubjectSetting.ExamMaxPoints,
+                        MaxPoints =  subject.SubjectSetting.ExamMaxPoints
                     }).OrderBy(subject => subject.SubjectName),
                     Students = group.Students.Select(student => new StudentDto
                     {

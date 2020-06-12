@@ -40,7 +40,7 @@
                 }
                 else if(group.Type == (int) GroupTypes.Created)
                 {
-                    <td><a asp-action="Delete" asp-controller="Group" asp-route-id="@group.Id">Deactivate</a></td>
+                    <td><a asp-action="Delete" asp-controller="Group" asp-route-groupId="@group.Id">Delete</a></td>
                 }
                 else
                 {

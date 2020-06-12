@@ -17,6 +17,7 @@ namespace BusinessLogic
             services.AddTransient<ISubjectService, SubjectService>();
             services.AddTransient<IPerformanceService, PerformanceService>();
             services.AddTransient<IHomeworkService, HomeworkService>();
+            services.AddTransient<ISubjectInfoService, SubjectInfoService>();
         }
     }
 }

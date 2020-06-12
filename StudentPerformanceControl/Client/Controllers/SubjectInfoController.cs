@@ -12,15 +12,15 @@ namespace Client.Controllers
     {
         #region Dependencies
         
-        private readonly ISubjectService _subjectService;
+        private readonly ISubjectInfoService _subjectInfoService;
 
         #endregion
 
         #region ctor
 
-        public SubjectInfoController(ISubjectService subjectService)
+        public SubjectInfoController(ISubjectInfoService subjectInfoService)
         {
-            _subjectService = subjectService;
+            _subjectInfoService = subjectInfoService;
         }
 
         #endregion
@@ -29,7 +29,7 @@ namespace Client.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var subjects = await _subjectService.GetSubjectInfosAsync();
+            var subjects = await _subjectInfoService.GetSubjectInfosAsync();
             return View(subjects);
         }
 
@@ -44,7 +44,7 @@ namespace Client.Controllers
         {
             try
             {
-                await _subjectService.CreateSubjectInfoAsync(subjectDto);
+                await _subjectInfoService.CreateSubjectInfoAsync(subjectDto);
                 return RedirectToAction("Index");
             }
             catch (SPCException ex)
@@ -64,7 +64,7 @@ namespace Client.Controllers
         {
             try
             {
-                await _subjectService.EditSubjectInfoAsync(subjectDto);
+                await _subjectInfoService.EditSubjectInfoAsync(subjectDto);
                 return RedirectToAction("Index");
             }
             catch (SPCException ex)
@@ -77,7 +77,7 @@ namespace Client.Controllers
         {
             try
             {
-                await _subjectService.DeleteSubjectInfoAsync(subjectInfoId);
+                await _subjectInfoService.DeleteSubjectInfoAsync(subjectInfoId);
                 return RedirectToAction("Index");
             }
             catch (SPCException ex)

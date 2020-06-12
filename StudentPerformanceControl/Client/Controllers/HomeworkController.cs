@@ -32,7 +32,7 @@ namespace Client.Controllers
             try
             {
                 var homeworks = await _homeworkService.GetHomeworksAsync(subjectId);
-                return View();
+                return View(homeworks);
             }
             catch (SPCException ex)
             {

@@ -20,15 +20,17 @@ namespace Client.Controllers
 
         private readonly ISubjectService _subjectService;
         private readonly IPerformanceService _performanceService;
+        private readonly ISubjectInfoService _subjectInfoService;
 
         #endregion
 
         #region ctor
 
-        public SubjectController(ISubjectService subjectService, IPerformanceService performanceService)
+        public SubjectController(ISubjectService subjectService, IPerformanceService performanceService, ISubjectInfoService subjectInfoService)
         {
             _subjectService = subjectService;
             _performanceService = performanceService;
+            _subjectInfoService = subjectInfoService;
         }
 
         #endregion
@@ -38,7 +40,7 @@ namespace Client.Controllers
         // GET: Subject
         public async Task<ActionResult> Index()
         {
-            var subjects = await _subjectService.GetSubjectInfosAsync();
+            var subjects = await _subjectInfoService.GetSubjectInfosAsync();
             return View(subjects);
         }
 
@@ -57,7 +59,7 @@ namespace Client.Controllers
                 GroupId = groupId
             };
 
-            var subjects = await _subjectService.GetSubjectInfosAsync(groupId);
+            var subjects = await _subjectInfoService.GetSubjectInfosAsync(groupId);
             ViewBag.Subjects = new SelectList(subjects, "Id", "Title");
             return View(subject);
         }
