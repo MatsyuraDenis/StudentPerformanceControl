@@ -42,28 +42,28 @@ namespace BusinessLogic.Services.Impl
             _logService.LogInfo($"Start loading subject performance info with subject id = {subjectId}");
 
             
-            var subjectRes = await _repository.GetAll<SubjectSetting>()
-                .Where(setting => setting.SubjectId == subjectId)
-                .Select(setting => new SubjectPerformanceInfoDto
+            var subjectRes = await _repository.GetAll<Subject>()
+                .Where(subject => subject.SubjectId == subjectId)
+                .Select(subject => new SubjectPerformanceInfoDto
                 {
-                    SubjectId = setting.SubjectId,
-                    GroupType = setting.Subject.Group.GroupTypeId,
-                    SubjectSettings = new SubjectSettingDto
+                    SubjectId = subject.SubjectId,
+                    GroupType = subject.Group.GroupTypeId,
+                    Subject = new SubjectDto
                     {
-                        SubjectSettingId = setting.SubjectSettingId,
-                        Module1MaxPoints = setting.Module1TestMaxPoints,
-                        Module2MaxPoints = setting.Module2TestMaxPoints,
-                        ExamMaxPoint = setting.ExamMaxPoints,
-                        HomeworkInfos = setting.HomeworkInfos.Select(info => new HomeworkDto
+                        Id = subject.SubjectId,
+                        Module1MaxPoints = subject.Module1TestMaxPoints,
+                        Module2MaxPoints = subject.Module2TestMaxPoints,
+                        ExamMaxPoints = subject.ExamMaxPoints,
+                        HomeworkInfos = subject.HomeworkInfos.Select(info => new HomeworkDto
                         {
                             HomeworkId = info.HomeworkInfoId,
                             MaxPoints = info.MaxPoints,
-                            SubjectId = setting.SubjectId,
+                            SubjectId = subject.SubjectId,
                             Number = info.Number,
                             HomeworkTitle = info.Title
                         })
                     },
-                    StudentPerformances = setting.Subject.StudentPerformances.Select(performance => new StudentPerformanceDto
+                    StudentPerformances = subject.StudentPerformances.Select(performance => new StudentPerformanceDto
                     {
                         StudentId = performance.StudentId,
                         SubjectId = performance.SubjectId,
@@ -103,22 +103,21 @@ namespace BusinessLogic.Services.Impl
 
         public async Task<SubjectDto> GetSubjectAsync(int subjectId)
         {
-            var res = await _repository.GetAll<SubjectSetting>()
-                       .Where(setting => setting.SubjectId == subjectId)
-                       .Select(setting => new SubjectDto
+            var res = await _repository.GetAll<Subject>()
+                       .Where(subject => subject.SubjectId == subjectId)
+                       .Select(subject => new SubjectDto
                        {
-                           Id = setting.SubjectId,
-                           SubjectSettingId = setting.SubjectSettingId,
-                           GroupId = setting.Subject.GroupId,
-                           SubjectInfoId = setting.Subject.SubjectInfoId,
-                           ExamMaxPoints = setting.ExamMaxPoints,
-                           Module1MaxPoints = setting.Module1TestMaxPoints,
-                           Module2MaxPoints = setting.Module2TestMaxPoints,
-                           NumberOfHomeworks = setting.HomeworkInfos.Count(),
-                           MaxPoints = setting.ExamMaxPoints +
-                                       setting.Module1TestMaxPoints +
-                                       setting.Module2TestMaxPoints +
-                                       setting.HomeworkInfos.Sum(homework => homework.MaxPoints)
+                           Id = subject.SubjectId,
+                           GroupId = subject.GroupId,
+                           SubjectInfoId = subject.SubjectInfoId,
+                           ExamMaxPoints = subject.ExamMaxPoints,
+                           Module1MaxPoints = subject.Module1TestMaxPoints,
+                           Module2MaxPoints = subject.Module2TestMaxPoints,
+                           NumberOfHomeworks = subject.HomeworkInfos.Count(),
+                           MaxPoints = subject.ExamMaxPoints +
+                                       subject.Module1TestMaxPoints +
+                                       subject.Module2TestMaxPoints +
+                                       subject.HomeworkInfos.Sum(homework => homework.MaxPoints)
                        })
                        .SingleOrDefaultAsync()
                    ?? throw new SPCException($"Subject with id {subjectId} does not exists in database", 404);
@@ -131,7 +130,10 @@ namespace BusinessLogic.Services.Impl
             var subject = new Subject
             {
                 GroupId = subjectDto.GroupId,
-                SubjectInfoId = subjectDto.SubjectInfoId
+                SubjectInfoId = subjectDto.SubjectInfoId,
+                Module1TestMaxPoints = subjectDto.Module1MaxPoints,
+                Module2TestMaxPoints = subjectDto.Module2MaxPoints,
+                ExamMaxPoints = subjectDto.ExamMaxPoints
             };
 
 
@@ -139,18 +141,6 @@ namespace BusinessLogic.Services.Impl
 
             await _repository.SaveContextAsync();
             
-            var subjectSetting = new SubjectSetting
-            {
-                Module1TestMaxPoints = subjectDto.Module1MaxPoints,
-                Module2TestMaxPoints = subjectDto.Module2MaxPoints,
-                ExamMaxPoints = subjectDto.ExamMaxPoints,
-                SubjectId = subject.SubjectId
-            };
-            
-            _repository.Add(subjectSetting);
-
-            await _repository.SaveContextAsync();
-
             var studentIds = await _repository.GetAll<Student>()
                 .Where(student => student.GroupId == subjectDto.GroupId)
                 .Select(student => student.StudentId)
@@ -173,7 +163,7 @@ namespace BusinessLogic.Services.Impl
 
         public async Task EditSubjectAsync(SubjectDto subjectDto)
         {
-            var dbSubject = await _repository.GetAll<SubjectSetting>()
+            var dbSubject = await _repository.GetAll<Subject>()
                 .SingleOrDefaultAsync(subject => subject.SubjectId == subjectDto.Id);
             
             dbSubject.Module1TestMaxPoints = subjectDto.Module1MaxPoints;

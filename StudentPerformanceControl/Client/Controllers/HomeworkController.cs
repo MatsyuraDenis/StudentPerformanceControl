@@ -44,11 +44,10 @@ namespace Client.Controllers
             }
         }
 
-        public ActionResult Create(int subjectSettingId, int subjectId)
+        public ActionResult Create(int subjectId)
         {
             var homework = new NewHomeworkDto
             {
-                SubjectSettingsId = subjectSettingId,
                 SubjectId = subjectId
             };
             return View(homework);

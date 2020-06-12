@@ -6,8 +6,7 @@
 
 @if (Model.GroupType == (int) GroupTypes.Created)
 {
-    <a asp-controller="Homework" asp-action="Create" asp-route-subjectSettingId="@Model.SubjectSettings.SubjectSettingId" 
-       asp-route-subjectId="@Model.SubjectId" class="btn btn-sm btn-primary">Add homework</a>
+    <a asp-controller="Homework" asp-action="Create" asp-route-subjectId="@Model.SubjectId" class="btn btn-sm btn-primary">Add homework</a>
 }
 
 <div>
@@ -15,7 +14,7 @@
         <thead>
         <tr>
             <th>Student</th>
-            @foreach (var setting in Model.SubjectSettings.HomeworkInfos)
+            @foreach (var setting in Model.Subject.HomeworkInfos)
             {
                 <th>@setting.Number</th>
             }

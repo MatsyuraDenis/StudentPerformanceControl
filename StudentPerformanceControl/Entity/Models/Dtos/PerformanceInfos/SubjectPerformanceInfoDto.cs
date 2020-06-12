@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Entity.Models.Dtos.Subject;
 
 namespace Entity.Models.Dtos.PerformanceInfos
 {
@@ -7,6 +8,6 @@ namespace Entity.Models.Dtos.PerformanceInfos
         public int SubjectId { get; set; }
         public int GroupType { get; set; }
         public IEnumerable<StudentPerformanceDto> StudentPerformances { get; set; }
-        public SubjectSettingDto SubjectSettings { get; set; }
+        public SubjectDto Subject { get; set; }
     }
 }

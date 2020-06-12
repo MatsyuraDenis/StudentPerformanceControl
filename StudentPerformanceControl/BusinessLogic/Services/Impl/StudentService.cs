@@ -56,9 +56,9 @@ namespace BusinessLogic.Services.Impl
                             Module1Points = performance.Module1TestPoints,
                             Module2Points = performance.Module2TestPoints,
                             ExamPoints = performance.ExamPoints,
-                            ExamMaxPoints = performance.Subject.SubjectSetting.ExamMaxPoints,
-                            Module1MaxPoints = performance.Subject.SubjectSetting.Module1TestMaxPoints,
-                            Module2MaxPoints = performance.Subject.SubjectSetting.Module2TestMaxPoints,
+                            ExamMaxPoints = performance.Subject.ExamMaxPoints,
+                            Module1MaxPoints = performance.Subject.Module1TestMaxPoints,
+                            Module2MaxPoints = performance.Subject.Module2TestMaxPoints,
                             Homeworks = performance.HomeworkResults.Select(homework => new StudentHomeworkPerformanceDto
                             {
                                 HomeworkId = homework.HomeworkInfoId,

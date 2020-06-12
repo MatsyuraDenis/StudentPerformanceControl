@@ -22,14 +22,14 @@ namespace BusinessLogic.Services.Impl
         public async Task CreateHomeworkAsync(NewHomeworkDto homeworkDto)
         {
             var number = await _repository.GetAll<HomeworkInfo>()
-                .Where(homework => homework.SubjectSettingId == homeworkDto.SubjectSettingsId)
+                .Where(homework => homework.SubjectId == homeworkDto.SubjectId)
                 .CountAsync();
 
             number++;
             
             var dbHomework = new HomeworkInfo
             {
-                SubjectSettingId = homeworkDto.SubjectSettingsId,
+                SubjectId = homeworkDto.SubjectId,
                 MaxPoints = homeworkDto.MaxPoints,
                 Number = number,
                 Title = homeworkDto.HomeworkTitle
@@ -66,7 +66,7 @@ namespace BusinessLogic.Services.Impl
                     HomeworkId = homeworkId,
                     HomeworkTitle = homework.Title,
                     MaxPoints = homework.MaxPoints,
-                    SubjectId = homework.SubjectSetting.SubjectId
+                    SubjectId = homework.SubjectId
                 })
                 .SingleOrDefaultAsync()
                    ?? throw new SPCException($"Homework with id {homeworkId} does not exists", 404);
@@ -75,14 +75,14 @@ namespace BusinessLogic.Services.Impl
         public async Task<IList<HomeworkDto>> GetHomeworksAsync(int subjectId)
         {
             return await _repository.GetAll<HomeworkInfo>()
-                .Where(homework => homework.SubjectSetting.SubjectId == subjectId)
+                .Where(homework => homework.SubjectId == subjectId)
                 .Select(homework => new HomeworkDto
                 {
                     HomeworkId = homework.HomeworkInfoId,
                     HomeworkTitle = homework.Title,
                     Number = homework.Number,
                     MaxPoints = homework.MaxPoints,
-                    SubjectId = homework.SubjectSetting.SubjectId
+                    SubjectId = homework.SubjectId
                 })
                 .ToListAsync();
         }

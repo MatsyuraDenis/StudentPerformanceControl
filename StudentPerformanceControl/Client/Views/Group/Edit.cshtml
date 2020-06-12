@@ -38,8 +38,8 @@
                         <td>@subject.ExamMaxPoints</td>
                         <td>@subject.NumberOfHomeworks</td>
                         <th>@subject.MaxPoints</th>
-                        <td><a asp-action="Create" asp-controller="Homework" asp-route-subjectSettingId="@subject.SubjectSettingId" asp-route-subjectId="@subject.Id">Add homework</a></td>
-                        <td><a asp-action="Edit" asp-controller="Homework" asp-route-subjectSettingId="@subject.SubjectSettingId" asp-route-subjectId="@subject.Id">Edit homeworks</a></td>
+                        <td><a asp-action="Create" asp-controller="Homework" asp-route-subjectId="@subject.Id">Add homework</a></td>
+                        <td><a asp-action="Edit" asp-controller="Homework" asp-route-subjectId="@subject.Id">Edit homeworks</a></td>
                         <td><a asp-action="EditSubject" asp-controller="Subject" asp-route-subjectId="@subject.Id">Edit</a></td>
                         <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject.Id" asp-route-groupId="@Model.Id">Delete</a></td>
                     </tr>
