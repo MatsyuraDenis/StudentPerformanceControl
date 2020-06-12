@@ -7,8 +7,11 @@ namespace Entity.Models.Dtos.Homeworks
         public int SubjectId { get; set; }
         public int GroupId { get; set; }
         public int HomeworkNumber { get; set; }
+        [Required]
+        [StringLength(32, MinimumLength = 2)]
         public string HomeworkTitle { get; set; }
-        [Range(3,15)]
+        [Required]
+        [Range(3, 20)]
         public int MaxPoints { get; set; }
         public NewHomeworkDataDto DataDto { get; set; }
     }

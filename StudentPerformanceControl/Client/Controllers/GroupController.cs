@@ -45,32 +45,76 @@ namespace Client.Controllers
         // GET: Group/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var group = await _groupService.GetGroupAsync(id);
-            return View(group);
+            try
+            {
+                var group = await _groupService.GetGroupAsync(id);
+                return View(group);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // GET: Group/Create
         public async Task<ActionResult> Create()
         {
-            ViewBag.Subjects = await _subjectInfoService.GetSubjectInfosAsync();
-            return View();
+            try
+            {
+                ViewBag.Subjects = await _subjectInfoService.GetSubjectInfosAsync();
+                return View();
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
         
         [AutoValidateAntiforgeryToken]
         public async Task<ActionResult> Save(int groupId)
         {
-            await _groupService.SaveAsync(groupId);
+            try
+            {
+                await _groupService.SaveAsync(groupId);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
         
         [HttpGet]
         public async Task<ActionResult> Update(int groupId)
         {
-            var newId = await _groupService.BoostGroupAsync(groupId);
-            var group = await _groupService.GetGroupAsync(newId);
-
-            return RedirectToAction("Edit", group);
+            try
+            {
+                var newId = await _groupService.BoostGroupAsync(groupId);
+                var group = await _groupService.GetGroupAsync(newId);
+                
+                return RedirectToAction("Edit", group);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // POST: Group/Create
@@ -80,6 +124,10 @@ namespace Client.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(groupDto);
+                }
                 var newGroupId = await _groupService.AddGroupAsync(groupDto);
                 var newGroup = await _groupService.GetGroupAsync(newGroupId);
 
@@ -97,8 +145,19 @@ namespace Client.Controllers
         
         public async Task<ActionResult> Edit(int groupId)
         {
-            var group = await _groupService.GetGroupAsync(groupId);
-            return View(group);
+            try
+            {
+                var group = await _groupService.GetGroupAsync(groupId);
+                return View(group);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         public async Task<ActionResult> Deactivate(int id)

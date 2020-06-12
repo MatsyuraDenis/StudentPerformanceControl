@@ -6,7 +6,8 @@ namespace Entity.Models.Dtos.Group
     public class AddGroupDto
     {
         public int GroupId { get; set; }
-        [MaxLength(32)]
+        [Required]
+        [StringLength(32, MinimumLength = 2)]
         public string GroupName { get; set; }
     }
 }

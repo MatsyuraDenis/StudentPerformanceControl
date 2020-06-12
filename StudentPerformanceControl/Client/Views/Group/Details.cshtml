@@ -8,12 +8,9 @@
 
 <h1 class="align-content-center m-1">@Model.Title group</h1>
 
-@if (Model.Type == (int) GroupTypes.Active)
-{
-    <a asp-action="Update" asp-controller="Group" asp-route-groupId="@Model.Id" class="btn btn-sm btn-primary">Boost</a>
-}
 
-<a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Back</a> 
+
+
 
 <div class="m-1">
      <h3 class="m-1"> Subject </h3>
@@ -50,17 +47,25 @@
         </tr>
         </thead>
         <tbody>
-            @foreach (var student in Model.Students)
-            {
-                <tr>
-                    <td>@studentIndex</td>
-                    <td>@student.SecondName</td>
-                    <td>@student.Name</td>
-                </tr>
-                studentIndex++;
-            }
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>@studentIndex</td>
+                <td>@student.SecondName</td>
+                <td>@student.Name</td>
+            </tr>
+            studentIndex++;
+        }
         </tbody>
     </table>
 </div>
 
+<div>
+    @if (Model.Type == (int) GroupTypes.Active)
+    {
+        <a asp-action="Update" asp-controller="Group" asp-route-groupId="@Model.Id" class="btn btn-sm btn-primary">Boost</a>
+    }
+
+    <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Back</a> 
+</div>
 

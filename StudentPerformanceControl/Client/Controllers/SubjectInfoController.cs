@@ -29,8 +29,19 @@ namespace Client.Controllers
 
         public async Task<ActionResult> Index()
         {
-            var subjects = await _subjectInfoService.GetSubjectInfosAsync();
-            return View(subjects);
+            try
+            {
+                var subjects = await _subjectInfoService.GetSubjectInfosAsync();
+                return View(subjects);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         public ActionResult Create()
@@ -44,6 +55,10 @@ namespace Client.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(subjectDto);
+                }
                 await _subjectInfoService.CreateSubjectInfoAsync(subjectDto);
                 return RedirectToAction("Index");
             }
@@ -51,26 +66,49 @@ namespace Client.Controllers
             {
                 return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
             }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         public async Task<ActionResult> Edit(int subjectInfoId)
         {
-            var subject = await _subjectInfoService.GetSubjectInfoAsync(subjectInfoId);
-            return View(subject);
+            try
+            {
+                var subject = await _subjectInfoService.GetSubjectInfoAsync(subjectInfoId);
+                            return View(subject);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditSubjectInfo(SubjectInfoDto subjectDto)
+        public async Task<ActionResult> Edit(SubjectInfoDto subjectDto)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(subjectDto);
+                }
                 await _subjectInfoService.EditSubjectInfoAsync(subjectDto);
                 return RedirectToAction("Index");
             }
             catch (SPCException ex)
             {
                 return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
             }
         }
 

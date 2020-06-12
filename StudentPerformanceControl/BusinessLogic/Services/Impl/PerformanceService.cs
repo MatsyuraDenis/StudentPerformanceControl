@@ -1,23 +1,38 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DataCore.EntityModels;
 using DataCore.Exceptions;
 using DataCore.Factories;
 using DataCore.Repository;
+using Entity.Models.Dtos.Homeworks;
 using Entity.Models.Dtos.PerformanceInfos;
+using Logger;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic.Services.Impl
 {
     public class PerformanceService : IPerformanceService
     {
-        private readonly IRepository _repository;
+        #region Dependencies
 
-        public PerformanceService(IRepositoryFactory repositoryFactory)
+        private readonly IRepository _repository;
+        private readonly ILogService _logService;
+
+        #endregion
+
+        #region ctor
+
+        public PerformanceService(IRepositoryFactory repositoryFactory, ILogService logService)
         {
+            _logService = logService;
             _repository = repositoryFactory.GetMsSqlRepository();
         }
 
+        #endregion
+
+        #region Implementation
+        
         public async Task EditPerformanceAsync(StudentPerformanceDto studentPerformanceDto)
         {
             var studentPerformance = await _repository.GetAll<StudentPerformance>()
@@ -53,7 +68,7 @@ namespace BusinessLogic.Services.Impl
 
         public async Task<StudentPerformanceDto> GetStudentPerformanceAsync(int studentId, int subjectId)
         {
-            var studentPerformance = await _repository.GetAll<Subject>()
+            var studentPerformances = await _repository.GetAll<Subject>()
                 .Where(subject => subject.SubjectId == subjectId)
                 .Select(subject => subject.StudentPerformances
                     .Where(performance => performance.StudentId == studentId)
@@ -66,24 +81,59 @@ namespace BusinessLogic.Services.Impl
                         ExamResult = performance.ExamPoints,
                         Module1Result = performance.Module1TestPoints,
                         Module2Result = performance.Module2TestPoints,
+                        Module1Max = performance.Subject.Module1TestMaxPoints,
+                        Module2Max = performance.Subject.Module2TestMaxPoints,
+                        ExamMax = performance.Subject.ExamMaxPoints,
                         Homeworks = performance.HomeworkResults.Select(result => new HomeworkResultDto
                         {
                             HomeworkId = result.HomeworkInfoId,
                             HomeworkResultId = result.HomeworkResultId,
-                            HomeworkNumber = _repository.GetAll<HomeworkInfo>()
-                                .Where(info => info.HomeworkInfoId == result.HomeworkInfoId)
-                                .Sum(info => info.Number),
                             Points = result.Points
                         })
                     }))
                     .SingleOrDefaultAsync();
 
-            var res = studentPerformance.SingleOrDefault() ??
-                      throw new SPCException($"Student {studentId} don't have results for subject {subjectId}", 404);
+            var studentPerformance = studentPerformances.SingleOrDefault() ??
+                                     throw new SPCException($"Student {studentId} don't have results for subject {subjectId}", 404);
 
-            res.EditableHomeworks = res.Homeworks.ToList();
+            await AssignValueToHomeworksAsync(studentPerformance);
             
-            return res;
+            return studentPerformance;
         }
+        
+        #endregion
+
+        #region Private methods
+
+        private async Task AssignValueToHomeworksAsync(StudentPerformanceDto studentPerformance)
+        {
+            var homeworkIds = studentPerformance.Homeworks.Select(dto => dto.HomeworkId).ToList();
+
+            var homeworksData = await _repository.GetAll<HomeworkInfo>()
+                .Where(homework => homeworkIds.Contains(homework.HomeworkInfoId))
+                .Select(homework => new
+                {
+                    HomeworkId = homework.HomeworkInfoId,
+                    Number = homework.Number,
+                    MaxPoints = homework.MaxPoints
+                })
+                .ToListAsync();
+
+            studentPerformance.EditableHomeworks = studentPerformance.Homeworks.ToList();
+
+            foreach (var editableHomework in studentPerformance.EditableHomeworks)
+            {
+                var dbHomework =
+                    homeworksData.SingleOrDefault(homework => editableHomework.HomeworkId == homework.HomeworkId);
+
+                if (dbHomework != null)
+                {
+                    editableHomework.MaxPoints = dbHomework.MaxPoints;
+                    editableHomework.HomeworkNumber = dbHomework.Number;
+                }
+            }
+        }
+
+        #endregion
     }
 }

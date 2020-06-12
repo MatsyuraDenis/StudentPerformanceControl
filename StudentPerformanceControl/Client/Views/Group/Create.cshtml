@@ -10,6 +10,7 @@
         <div>
             <label asp-for="GroupName" class="control-label">Group name</label>
             <input asp-for="GroupName" class="form-control"/>
+            <span asp-validation-for="GroupName"></span>
         </div>
         <div class="m-3">
             <input type="submit" value="Next" class="btn btn-sm btn-success">
@@ -17,4 +18,10 @@
         </div>
     </form>
 </div>
+
+@section scripts{
+ 
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
 

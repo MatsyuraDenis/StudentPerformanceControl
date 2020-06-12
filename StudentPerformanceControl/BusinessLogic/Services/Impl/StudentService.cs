@@ -79,9 +79,24 @@ namespace BusinessLogic.Services.Impl
             return studentInfo;
         }
 
+        public async Task<StudentDto> GetStudentAsync(int studentId)
+        {
+            return await _repository.GetAll<Student>()
+                .Where(student => student.StudentId == studentId)
+                .Select(student => new StudentDto
+                {
+                    GroupId = student.GroupId,
+                    Name = student.Name,
+                    SecondName = student.SecondName,
+                    Id = student.StudentId
+                })
+                .SingleOrDefaultAsync()
+                ?? throw new SPCException($"student with id {studentId} does not exists", StatusCodes.Status404NotFound);
+        }
+
         public async Task AddStudentAsync(StudentDto studentDto)
         {
-            var student =new Student
+            var student = new Student
             {
                 Name = studentDto.Name,
                 SecondName = studentDto.SecondName,
@@ -124,10 +139,25 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task EditStudentAsync(StudentDto studentDto)
+        {
+            var dbStudent = await _repository.GetAll<Student>()
+                .SingleOrDefaultAsync(student => student.StudentId == studentDto.Id) 
+                            ?? throw new SPCException($"student with id {studentDto.Id} does not exists", StatusCodes.Status404NotFound);
+
+            dbStudent.Name = studentDto.Name;
+            dbStudent.SecondName = studentDto.SecondName;
+            
+            _repository.Update(dbStudent);
+
+            await _repository.SaveContextAsync();
+        }
+
         public async Task RemoveStudentAsync(int studentId)
         {
             var dbStudent = await _repository.GetAll<Student>()
-                .SingleOrDefaultAsync(student => student.StudentId == studentId);
+                .SingleOrDefaultAsync(student => student.StudentId == studentId) 
+                            ?? throw new SPCException($"student with id {studentId} does not exists", StatusCodes.Status404NotFound);
             
             _repository.Delete(dbStudent);
 

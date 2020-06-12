@@ -40,28 +40,62 @@ namespace Client.Controllers
         // GET: Subject
         public async Task<ActionResult> Index()
         {
-            var subjects = await _subjectInfoService.GetSubjectInfosAsync();
-            return View(subjects);
+            try
+            {
+                var subjects = await _subjectInfoService.GetSubjectInfosAsync();
+                return View(subjects);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // GET: Subject/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var subjects = await _subjectService.GetSubjectPerformanceInfoAsync(id);
-            return View(subjects);
+            try
+            {
+                var subjects = await _subjectService.GetSubjectPerformanceInfoAsync(id);
+                return View(subjects);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
+            
         }
 
         // GET: Subject/Create
         public async Task<ActionResult> Create(int groupId)
         {
-            var subject = new SubjectDto
+            try
             {
-                GroupId = groupId
-            };
+                var subject = new SubjectDto
+                {
+                    GroupId = groupId
+                };
 
-            var subjects = await _subjectInfoService.GetSubjectInfosAsync(groupId);
-            ViewBag.Subjects = new SelectList(subjects, "Id", "Title");
-            return View(subject);
+                var subjects = await _subjectInfoService.GetSubjectInfosAsync(groupId);
+                ViewBag.Subjects = new SelectList(subjects, "Id", "Title");
+                return View(subject);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         // POST: Subject/Create
@@ -71,6 +105,10 @@ namespace Client.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(subject);
+                }
                 await _subjectService.CreateSubjectAsync(subject);
 
                 return RedirectToAction("Edit", "Group", new {groupId = subject.GroupId});
@@ -88,8 +126,19 @@ namespace Client.Controllers
         // GET: Subject/Edit/5
         public async Task<ActionResult> Edit(int studentId, int subjectId)
         {
-            var performance = await _performanceService.GetStudentPerformanceAsync(studentId, subjectId);
-            return View(performance);
+            try
+            {
+                var performance = await _performanceService.GetStudentPerformanceAsync(studentId, subjectId);
+                return View(performance);
+            }
+            catch(SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch(Exception ex)
+            {
+                return View("Error");
+            }
         }
 
         public async Task<ActionResult> EditSubject(int subjectId)
@@ -116,6 +165,10 @@ namespace Client.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(subjectDto);
+                }
                 await _subjectService.EditSubjectAsync(subjectDto.Subject);
                 
                 return RedirectToAction("Edit", "Group", new {groupId = subjectDto.Subject.GroupId});
@@ -137,6 +190,10 @@ namespace Client.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View("Edit", studentPerformance);
+                }
                 await _performanceService.EditPerformanceAsync(studentPerformance);
                 
                 return RedirectToAction("Details", "Subject", new {id = studentPerformance.SubjectId});
@@ -157,11 +214,15 @@ namespace Client.Controllers
             try
             {
                 await _subjectService.RemoveSubjectAsync(id);
-                return RedirectToAction("Details", "Group", new { id = groupId });
+                return RedirectToAction("Edit", "Group", new { id = groupId });
             }
-            catch (Exception ex)
+            catch(SPCException ex)
             {
-                return View("ErrorView", new ErrorDto(ex.Message, 400));
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch(Exception ex)
+            {
+                return View("Error");
             }
         }
         

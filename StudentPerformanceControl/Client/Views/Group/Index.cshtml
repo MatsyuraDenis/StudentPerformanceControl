@@ -24,8 +24,8 @@
             <tr>
                 <td> @index </td>
                 <td> @group.Title </td>
-                <td asp-format="{0:dd'/'MM'/'yyyy}"> @group.CreatedAt</td>
-                <td asp-format="{0:dd'/'MM'/'yyyy}"> @group.DeactivatedAt </td>
+                <td> @group.CreatedAt?.Date.ToString("d")</td>
+                <td> @group.DeactivatedAt?.Date.ToString("d") </td>
                 @if (group.Type == (int) GroupTypes.Created)
                 {
                     <td><a asp-controller="Group" asp-action="Edit" asp-route-groupId="@group.Id">Edit</a></td>

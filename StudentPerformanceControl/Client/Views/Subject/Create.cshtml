@@ -19,14 +19,17 @@
                 <div class="form-group">
                     <label asp-for="Module1MaxPoints" class="control-label">Module 1 max points</label>
                     <input asp-for="Module1MaxPoints" class="form-control" />
+                    <span asp-validation-for="Module1MaxPoints"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Module2MaxPoints" class="control-label">Module 2 max points</label>
                     <input asp-for="Module2MaxPoints" class="form-control" />
+                    <span asp-validation-for="Module2MaxPoints"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="ExamMaxPoints" class="control-label">Exam</label>
                     <input asp-for="ExamMaxPoints" class="form-control" />
+                    <span asp-validation-for="ExamMaxPoints"></span>
                 </div>
                 @Html.HiddenFor(subject => subject.SubjectInfoId)
                 @Html.HiddenFor(subject => subject.GroupId)

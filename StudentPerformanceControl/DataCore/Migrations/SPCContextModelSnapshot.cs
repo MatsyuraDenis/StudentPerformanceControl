@@ -104,6 +104,8 @@ namespace DataCore.Migrations
 
                     b.HasKey("HomeworkResultId");
 
+                    b.HasIndex("HomeworkInfoId");
+
                     b.HasIndex("StudentPerformanceId");
 
                     b.ToTable("HomeworkResults");
@@ -235,6 +237,12 @@ namespace DataCore.Migrations
 
             modelBuilder.Entity("DataCore.EntityModels.HomeworkResult", b =>
                 {
+                    b.HasOne("DataCore.EntityModels.HomeworkInfo", "HomeworkInfo")
+                        .WithMany()
+                        .HasForeignKey("HomeworkInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DataCore.EntityModels.StudentPerformance", "StudentPerformance")
                         .WithMany("HomeworkResults")
                         .HasForeignKey("StudentPerformanceId")

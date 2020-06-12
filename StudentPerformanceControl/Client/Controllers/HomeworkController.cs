@@ -46,27 +46,64 @@ namespace Client.Controllers
 
         public async Task<ActionResult> Create(int subjectId, int groupId)
         {
-            var homework = new NewHomeworkDto
+            try
             {
-                SubjectId = subjectId,
-                GroupId = groupId,
-                DataDto = await _homeworkService.GetCreateHomeworkDataAsync(subjectId)
-            };
-            return View(homework);
+                var homework = new NewHomeworkDto
+                {
+                    SubjectId = subjectId,
+                    GroupId = groupId,
+                    DataDto = await _homeworkService.GetCreateHomeworkDataAsync(subjectId)
+                };
+                return View(homework);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(NewHomeworkDto homeworkDto)
         {
-            await _homeworkService.CreateHomeworkAsync(homeworkDto);
-            return RedirectToAction("Edit", "Group", new {groupId = homeworkDto.GroupId});
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(homeworkDto);
+                }
+                await _homeworkService.CreateHomeworkAsync(homeworkDto);
+                return RedirectToAction("Edit", "Group", new {groupId = homeworkDto.GroupId});
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         public async Task<ActionResult> Edit(int homeworkId)
         {
-            var homework = await _homeworkService.GetHomeworkDtoAsync(homeworkId);
-            return View(homework);
+            try
+            {
+                var homework = await _homeworkService.GetHomeworkDtoAsync(homeworkId);
+                return View(homework);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
         }
 
         [HttpPost]
@@ -75,6 +112,10 @@ namespace Client.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View("Edit", homeworkDto);
+                }
                 await _homeworkService.EditHomeworkAsync(homeworkDto);
                 return RedirectToAction("Index", "Homework", new {subjectId = homeworkDto.SubjectId} );
             }

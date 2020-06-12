@@ -10,7 +10,9 @@ namespace BusinessLogic.Services
     public interface IStudentService
     {
         Task<StudentPerformanceDetailsDto> GetStudentPerformanceAsync(int studentId);
+        Task<StudentDto> GetStudentAsync(int studentId);
         Task AddStudentAsync(StudentDto studentDto);
+        Task EditStudentAsync(StudentDto studentDto);
         Task RemoveStudentAsync(int studentId);
     }
 }
