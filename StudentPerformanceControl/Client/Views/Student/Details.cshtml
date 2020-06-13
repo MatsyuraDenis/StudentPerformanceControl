@@ -6,41 +6,45 @@
 }
 
 <h3>@Model.SecondName @Model.Name</h3>
-<a href="##" onClick="history.go(-1); return false;" class="btn btn-danger btn-sm"> Back</a>
 <div class="row">
-@foreach (var performance in @Model.Subjects)
-{
-    <div class="col-md-3">
-        <h6>@performance.SubjectTitle</h6>
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Result</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>Module 1</td>
-                <td>@performance.Module1Points/@performance.Module1MaxPoints</td>
-            </tr>
-            <tr>
-                <td>Module 2</td>
-                <td>@performance.Module2Points/@performance.Module2MaxPoints</td>
-            </tr>
-            <tr>
-                <td>Exam</td>
-                <td>@performance.ExamPoints/@performance.ExamMaxPoints</td>
-            </tr>
-            @foreach (var homework in performance.Homeworks)
-            {
+    @foreach (var performance in @Model.Subjects)
+    {
+        <div class="col-md-3">
+            <h6>@performance.SubjectTitle</h6>
+            <table class="table table-bordered">
+                <thead>
                 <tr>
-                    <td>@homework.HomeworkNumber (@homework.HomeworkNumber)</td>
-                    <td>@homework.Points/@homework.MaxPoints</td>
+                    <th>Name</th>
+                    <th>Result</th>
                 </tr>
-            }
-            </tbody>
-        </table>
-    </div>
-}
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Module 1</td>
+                    <td>@performance.Module1Points/@performance.Module1MaxPoints</td>
+                </tr>
+                <tr>
+                    <td>Module 2</td>
+                    <td>@performance.Module2Points/@performance.Module2MaxPoints</td>
+                </tr>
+                <tr>
+                    <td>Exam</td>
+                    <td>@performance.ExamPoints/@performance.ExamMaxPoints</td>
+                </tr>
+                @foreach (var homework in performance.Homeworks)
+                {
+                    <tr>
+                        <td>@homework.HomeworkNumber (@homework.HomeworkNumber)</td>
+                        <td>@homework.Points/@homework.MaxPoints</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+            <a asp-controller="Subject" asp-action="Details" asp-route-id="@performance.SubjectId" class="btn btn-sm btn-primary">Go to subject</a>
+        </div>
+    }
+</div>
+
+<div class="m-3">
+    <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger btn-sm"> Back</a>
 </div>
