@@ -12,17 +12,17 @@
             <form asp-action="EditSubjectPerformance" asp-controller="Subject">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Module1Result" class="control-label">Module 1 test</label>
+                    <label asp-for="Module1Result" class="control-label">Module 1 test(Max: @Model.Module1Max)</label>
                     <input asp-for="Module1Result" class="form-control" />
                     <span asp-validation-for="Module1Result"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Module2Result" class="control-label">Module 2 test</label>
+                    <label asp-for="Module2Result" class="control-label">Module 2 test(Max: @Model.Module2Max)</label>
                     <input asp-for="Module2Result" class="form-control" />
                     <span asp-validation-for="Module2Result"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ExamResult" class="control-label">Exam</label>
+                    <label asp-for="ExamResult" class="control-label">Exam (Max: @Model.ExamMax)</label>
                     <input asp-for="ExamResult" class="form-control" />
                     <span asp-validation-for="ExamResult"></span>
                 </div>
@@ -31,7 +31,7 @@
                         @for (var i = 0; i < Model.EditableHomeworks.Count(); i++)
                         {
                             <div class="form-group">
-                                <label asp-for="EditableHomeworks[i].Points" class="control-label">Homework№ @Model.EditableHomeworks[i].HomeworkNumber</label>
+                                <label asp-for="EditableHomeworks[i].Points" class="control-label">Homework№ @Model.EditableHomeworks[i].HomeworkNumber (Max: @Model.EditableHomeworks[i].MaxPointsw)</label>
                                 <input asp-for="EditableHomeworks[i].Points" class="form-control" />
                                 <span asp-validation-for="EditableHomeworks[i].Points"></span>
                             </div>
@@ -52,9 +52,12 @@
                 @Html.HiddenFor(g=>g.StudentId)
                 @Html.HiddenFor(g=>g.TotalPoints)
                 @Html.HiddenFor(g=>g.Homeworks)
+                @Html.HiddenFor(g=>g.Module1Max)
+                @Html.HiddenFor(g=>g.Module2Max)
+                @Html.HiddenFor(g=>g.ExamMax)
                 
                 <div>
-                    <input type="submit" class="form-control" value="Submit"/>
+                    <input type="submit" class="btn btn-primary" value="Submit"/>
                     <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger"> Back</a> 
                 </div>
             </form>
