@@ -21,7 +21,8 @@
                 <td>@subject.Title</td>
                 <td>@subject.GroupLearn</td>
                 <td><a asp-action="Edit" asp-controller="Subject" asp-route-subject="@subject">Details</a></td>
-                <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject">Deactivare</a></td>
+                <td><a asp-action="Delete" asp-controller="Subject" asp-route-id="@subject"
+                       onclick="return confirm('Are you sure want to delete homework : @subject.Title ')">Deactivare</a></td>
             </tr>
         }
         </tbody>

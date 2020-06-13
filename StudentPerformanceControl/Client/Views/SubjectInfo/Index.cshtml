@@ -37,7 +37,8 @@
             }
             @if (subject.GroupLearn + subject.GroupLearned == 0)
             {
-                <td><a asp-action="Delete" asp-controller="SubjectInfo" asp-route-subjectInfoId="@subject.Id">Delete</a></td>
+                <td><a asp-action="Delete" asp-controller="SubjectInfo" asp-route-subjectInfoId="@subject.Id"
+                       onclick="return confirm('Are you sure want to delete homework : @subject.Title ')">Delete</a></td>
             }
             else
             {

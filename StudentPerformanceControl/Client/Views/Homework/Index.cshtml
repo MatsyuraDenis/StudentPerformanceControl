@@ -27,7 +27,8 @@
             <td>@homework.HomeworkTitle</td>
             <td>@homework.MaxPoints</td>
             <td><a asp-action="Edit" asp-controller="Homework" asp-route-homeworkId="@homework.HomeworkId">Edit</a></td>
-            <td><a asp-action="Delete" asp-controller="Homework" asp-route-subjectId="@homework.SubjectId" asp-route-homeworkId="@homework.HomeworkId">Delete</a></td>
+            <td><a asp-action="Delete" asp-controller="Homework" asp-route-subjectId="@homework.SubjectId" asp-route-homeworkId="@homework.HomeworkId"
+                   onclick="return confirm('Are you sure want to delete homework : @homework.HomeworkTitle ')">Delete</a></td>
         </tr>
     }
     </tbody>
