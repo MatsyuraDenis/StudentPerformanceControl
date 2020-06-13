@@ -58,10 +58,10 @@ namespace BusinessLogic.Services.Impl
                     Points = 0
                 });
             }
-
-            _logService.LogInfo($"Homework {homeworkDto.HomeworkTitle} for group with id {homeworkDto.GroupId}, subject {homeworkDto.SubjectId} created");
             
             await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Homework {homeworkDto.HomeworkTitle} for group with id {homeworkDto.GroupId}, subject {homeworkDto.SubjectId} created");
         }
 
         public async Task<HomeworkDto> GetHomeworkDtoAsync(int homeworkId)

@@ -76,6 +76,7 @@ namespace Client.Controllers
                 {
                     return View(homeworkDto);
                 }
+                
                 await _homeworkService.CreateHomeworkAsync(homeworkDto);
                 return RedirectToAction("Edit", "Group", new {groupId = homeworkDto.GroupId});
             }

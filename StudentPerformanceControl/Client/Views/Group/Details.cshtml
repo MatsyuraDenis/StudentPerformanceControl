@@ -44,6 +44,7 @@
             <th>Number</th>
             <th>SecondName</th>
             <th>Name</th>
+            <th>Performance details</th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@
                 <td>@studentIndex</td>
                 <td>@student.SecondName</td>
                 <td>@student.Name</td>
+                <td><a asp-controller="Student" asp-action="Details" asp-route-studentId="@student.Id">Details</a></td>
             </tr>
             studentIndex++;
         }

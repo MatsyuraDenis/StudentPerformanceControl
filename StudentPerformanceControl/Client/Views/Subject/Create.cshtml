@@ -17,17 +17,17 @@
                     <select asp-for="SubjectInfoId" asp-items="ViewBag.Subjects" class="form-control"></select>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Module1MaxPoints" class="control-label">Module 1 max points</label>
+                    <label asp-for="Module1MaxPoints" class="control-label">Module 1 max points(5-25)</label>
                     <input asp-for="Module1MaxPoints" class="form-control" />
                     <span asp-validation-for="Module1MaxPoints"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Module2MaxPoints" class="control-label">Module 2 max points</label>
+                    <label asp-for="Module2MaxPoints" class="control-label">Module 2 max points(5-25)</label>
                     <input asp-for="Module2MaxPoints" class="form-control" />
                     <span asp-validation-for="Module2MaxPoints"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ExamMaxPoints" class="control-label">Exam</label>
+                    <label asp-for="ExamMaxPoints" class="control-label">Exam(10-40)</label>
                     <input asp-for="ExamMaxPoints" class="form-control" />
                     <span asp-validation-for="ExamMaxPoints"></span>
                 </div>

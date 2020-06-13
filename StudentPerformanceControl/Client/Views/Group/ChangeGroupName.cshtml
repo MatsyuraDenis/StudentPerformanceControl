@@ -1,0 +1,30 @@
+@model Entity.Models.Dtos.Group.AddGroupDto
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+ <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Back</a>
+<div class="container">
+    <h2>Change group name</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="ChangeGroupName" asp-controller="Group">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="GroupName" class="control-label">Name</label>
+                    <input asp-for="GroupName" class="form-control" />
+                    <span asp-validation-for="GroupName"></span>
+                </div>
+                @Html.HiddenFor(group => group.GroupId)
+                <div>
+                    <input type="submit" class="btn btn-sm btn-primary" value="Submit"/>
+                    <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Back</a>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+</div>

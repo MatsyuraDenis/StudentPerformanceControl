@@ -105,7 +105,7 @@ namespace Client.Controllers
                 var newId = await _groupService.BoostGroupAsync(groupId);
                 var group = await _groupService.GetGroupAsync(newId);
                 
-                return RedirectToAction("Edit", group);
+                return RedirectToAction("Edit", group.Id);
             }
             catch (SPCException ex)
             {
@@ -132,6 +132,30 @@ namespace Client.Controllers
                 var newGroup = await _groupService.GetGroupAsync(newGroupId);
 
                 return RedirectToAction("Edit", new { groupId = newGroup.Id } );
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
+
+        public ActionResult ChangeGroupName(int groupId, string groupName)
+        {
+            return View(new AddGroupDto{GroupId = groupId, GroupName = groupName});
+        }
+        
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<ActionResult> ChangeGroupName(AddGroupDto groupDto)
+        {
+            try
+            {
+                await _groupService.ChangeGroupNameAsync(groupDto);
+                return RedirectToAction("Edit",  new {groupId = groupDto.GroupId});
             }
             catch (SPCException ex)
             {

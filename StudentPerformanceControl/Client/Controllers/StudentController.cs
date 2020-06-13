@@ -15,20 +15,39 @@ namespace Client.Controllers
         #region Dependencies
 
         private readonly IStudentService _studentService;
+        private readonly IPerformanceService _performanceService;
 
         #endregion
 
         #region ctor
 
-        public StudentController(IStudentService studentService)
+        public StudentController(IStudentService studentService, IPerformanceService performanceService)
         {
             _studentService = studentService;
+            _performanceService = performanceService;
         }
 
         #endregion
 
         #region Methods
 
+        public async Task<ActionResult> Details(int studentId)
+        {
+            try
+            {
+                var studentPerformance = await _performanceService.GetStudentPerformanceAsync(studentId);
+                return View(studentPerformance);
+            }
+            catch (SPCException ex)
+            {
+                return View("ErrorView", new ErrorDto(ex.Message, ex.StatusCode));
+            }
+            catch
+            {
+                return View("Error");
+            }
+        }
+        
          // GET: Student/Create
         public ActionResult Create(int groupId)
         {

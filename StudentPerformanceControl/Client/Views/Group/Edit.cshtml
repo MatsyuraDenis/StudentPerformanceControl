@@ -6,7 +6,7 @@
     var subjectIndex = 1;
 }
 
-<h1>@Model.Title</h1>
+<h1>@Model.Title</h1> (<a asp-controller="Group" asp-action="ChangeGroupName" asp-route-groupId="@Model.Id" asp-route-groupName="@Model.Title">Change group name</a>)
 
 <div class="m-1">
     <h3 class="m-1"> Subject <a class="btn btn-primary btn-sm" asp-action="Create" asp-controller="Subject" asp-route-groupId="@Model.Id">Add subject</a></h3>

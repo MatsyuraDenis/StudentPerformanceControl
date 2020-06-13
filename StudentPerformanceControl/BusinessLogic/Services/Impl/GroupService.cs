@@ -205,6 +205,22 @@ namespace BusinessLogic.Services.Impl
             await _repository.SaveContextAsync();
         }
 
+        public async Task ChangeGroupNameAsync(AddGroupDto groupDto)
+        {
+            _logService.LogInfo($"Start change name for group {groupDto.GroupId}");
+
+            var dbGroup = await _repository.GetAll<Group>()
+                .SingleOrDefaultAsync(group => group.GroupId == groupDto.GroupId);
+
+            dbGroup.GroupName = groupDto.GroupName;
+            
+            _repository.Update(dbGroup);
+
+            await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Name for group {groupDto.GroupId} changed");
+        }
+
         #endregion
 
         #region Private Methods

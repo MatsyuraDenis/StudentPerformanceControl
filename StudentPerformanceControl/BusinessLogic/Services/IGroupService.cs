@@ -15,5 +15,6 @@ namespace BusinessLogic.Services
         Task SaveAsync(int groupId);
         Task DeactivateGroupAsync(int groupId);
         Task DeleteGroupAsync(int groupId);
+        Task ChangeGroupNameAsync(AddGroupDto groupDto);
     }
 }

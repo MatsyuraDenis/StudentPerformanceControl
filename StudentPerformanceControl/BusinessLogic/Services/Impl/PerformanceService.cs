@@ -7,7 +7,9 @@ using DataCore.Factories;
 using DataCore.Repository;
 using Entity.Models.Dtos.Homeworks;
 using Entity.Models.Dtos.PerformanceInfos;
+using Entity.Models.Dtos.StudentPerformance;
 using Logger;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessLogic.Services.Impl
@@ -109,6 +111,52 @@ namespace BusinessLogic.Services.Impl
             return studentPerformance;
         }
         
+        
+        public async Task<StudentPerformanceDetailsDto> GetStudentPerformanceAsync(int studentId)
+        {
+            _logService.LogInfo($"Start loading academic performance for student with id {studentId}");
+
+            var studentInfo = await _repository.GetAll<Student>()
+                .Where(student => student.StudentId == studentId)
+                .Select(student => new StudentPerformanceDetailsDto
+                {
+                    StudentId = student.StudentId,
+                    Name = student.Name,
+                    SecondName = student.SecondName,
+                    Subjects = _repository.GetAll<StudentPerformance>()
+                        .Where(performance => performance.StudentId == studentId && performance.Subject.GroupId == student.GroupId)
+                        .Select(performance => new StudentSubjectPerformanceDto
+                        {
+                            SubjectId = performance.Subject.SubjectId,
+                            SubjectTitle = performance.Subject.SubjectInfo.Title,
+                            Module1Points = performance.Module1TestPoints,
+                            Module2Points = performance.Module2TestPoints,
+                            ExamPoints = performance.ExamPoints,
+                            ExamMaxPoints = performance.Subject.ExamMaxPoints,
+                            Module1MaxPoints = performance.Subject.Module1TestMaxPoints,
+                            Module2MaxPoints = performance.Subject.Module2TestMaxPoints,
+                            Homeworks = performance.HomeworkResults.Select(homework => new StudentHomeworkPerformanceDto
+                            {
+                                HomeworkId = homework.HomeworkInfoId,
+                                HomeworkResultId = homework.HomeworkResultId,
+                                Points = homework.Points,
+                                MaxPoints = _repository.GetAll<HomeworkInfo>()
+                                    .Where(info => info.HomeworkInfoId == homework.HomeworkInfoId)
+                                    //Sum is only for 1 value
+                                    .Sum(info => info.MaxPoints)
+                            })
+                        })
+                })
+                .SingleOrDefaultAsync()
+                ?? throw new SPCException($"student with id {studentId} does not exists", StatusCodes.Status404NotFound);
+
+            await AssignValueToHomeworksAsync(studentInfo);
+            
+            _logService.LogInfo($"Load academic performance for student with id {studentId} completed!");
+            
+            return studentInfo;
+        }
+        
         #endregion
 
         #region Private methods
@@ -138,6 +186,36 @@ namespace BusinessLogic.Services.Impl
                 {
                     editableHomework.MaxPoints = dbHomework.MaxPoints;
                     editableHomework.HomeworkNumber = dbHomework.Number;
+                }
+            }
+        }
+        
+        private async Task AssignValueToHomeworksAsync(StudentPerformanceDetailsDto studentPerformance)
+        {
+            var homeworkIds = studentPerformance.Subjects.SelectMany(dto => dto.Homeworks).Select(homework => homework.HomeworkId).ToList();
+
+            var homeworksData = await _repository.GetAll<HomeworkInfo>()
+                .Where(homework => homeworkIds.Contains(homework.HomeworkInfoId))
+                .Select(homework => new
+                {
+                    HomeworkId = homework.HomeworkInfoId,
+                    Number = homework.Number,
+                    MaxPoints = homework.MaxPoints
+                })
+                .ToListAsync();
+
+            foreach (var subject in studentPerformance.Subjects)
+            {
+                foreach (var subjectHomework in subject.Homeworks)
+                {
+                    var dbHomework =
+                        homeworksData.SingleOrDefault(homework => subjectHomework.HomeworkId == homework.HomeworkId);
+
+                    if (dbHomework != null)
+                    {
+                        subjectHomework.MaxPoints = dbHomework.MaxPoints;
+                        subjectHomework.HomeworkNumber = dbHomework.Number;
+                    }
                 }
             }
         }

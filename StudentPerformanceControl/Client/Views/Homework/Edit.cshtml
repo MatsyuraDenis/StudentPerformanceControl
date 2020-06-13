@@ -18,7 +18,7 @@
                     <span asp-validation-for="HomeworkTitle"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="MaxPoints" class="control-label">Max points</label>
+                    <label asp-for="MaxPoints" class="control-label">Max points(3-20)</label>
                     <input asp-for="MaxPoints" class="form-control" />
                     <span asp-validation-for="MaxPoints"></span>
                 </div>
@@ -26,6 +26,7 @@
                 @Html.HiddenFor(homework => homework.GroupId)
                 @Html.HiddenFor(homework => homework.SubjectId)
                 @Html.HiddenFor(homework => homework.Number)
+                @Html.HiddenFor(homework => homework.SubjectName)
                 <div>
                     <input type="submit" class="btn btn-sm btn-primary" value="Submit"/> 
                     <a href="##" onClick="history.go(-1); return false;" class="btn btn-sm btn-danger"> Cancel</a> 
