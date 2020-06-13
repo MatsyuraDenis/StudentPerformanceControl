@@ -21,6 +21,11 @@ namespace DataCore.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<GroupType>()
+                .HasData(new GroupType{Id = 1, Type = "Former"},
+                new GroupType{Id = 2, Type = "Active"},
+                new GroupType{Id = 3, Type = "Created"});
+            
             modelBuilder.ApplyConfiguration(new GroupEntityConfiguration());
             modelBuilder.ApplyConfiguration(new HomeworkResultEntityConfiguration());
             modelBuilder.ApplyConfiguration(new HomeworkInfoEntityConfiguration());
