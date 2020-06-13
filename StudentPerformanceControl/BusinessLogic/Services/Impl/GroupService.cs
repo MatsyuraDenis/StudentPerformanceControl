@@ -61,8 +61,11 @@ namespace BusinessLogic.Services.Impl
 
         public async Task<GroupDto> GetGroupAsync(int groupId)
         {
+            _logService.LogInfo($"Start loading groups with id {groupId}");
+            
             var dbGroup = await GroupQuery()
-                .SingleOrDefaultAsync(group => group.Id == groupId);
+                .SingleOrDefaultAsync(group => group.Id == groupId)
+                          ?? throw new SPCException($"Group with id {groupId} does not exists", 404);
 
             foreach (var subject in dbGroup.Subjects)
             {
@@ -72,11 +75,15 @@ namespace BusinessLogic.Services.Impl
                                       + subject.ExamMaxPoints;
             }
 
+            _logService.LogInfo($"Group with id {groupId} load completed");
+            
             return dbGroup;
         }
 
         public async Task<int> AddGroupAsync(AddGroupDto group)
         {
+            _logService.LogInfo($"Adding group {group.GroupName}");
+            
             var newGroup = new Group
             {
                 GroupName = group.GroupName,
@@ -87,14 +94,19 @@ namespace BusinessLogic.Services.Impl
             _repository.Add(newGroup);
             await _repository.SaveContextAsync();
             
+            _logService.LogInfo($"Group {group.GroupName} added. Group id - {newGroup.GroupId}");
+            
             return newGroup.GroupId;
         }
 
         public async Task<int> BoostGroupAsync(int groupId)
         {
+            _logService.LogInfo($"Boost group {groupId}");
+            
             var dbGroup = await _repository.GetAll<Group>()
                 .Include(group => group.Students)
-                .SingleOrDefaultAsync(group => group.GroupId == groupId);
+                .SingleOrDefaultAsync(group => group.GroupId == groupId)
+                          ?? throw new SPCException($"Group with id {groupId} does not exists", 404);
             
             var newGroup = new Group
             {
@@ -125,37 +137,51 @@ namespace BusinessLogic.Services.Impl
 
             await _repository.SaveContextAsync();
 
+            _logService.LogInfo($"Boost group {groupId} completed. New groupId = {newGroup.GroupId}");
+            
             return newGroup.GroupId;
         }
 
         public async Task SaveAsync(int groupId)
         {
+            _logService.LogInfo($"Activating group {groupId}");
+            
             var dbGroup = await _repository.GetAll<Group>()
-                .SingleOrDefaultAsync(g => g.GroupId == groupId);
+                .SingleOrDefaultAsync(g => g.GroupId == groupId)
+                          ?? throw new SPCException($"Group with id {groupId} does not exists", 404);
 
             dbGroup.CreatedAt = DateTime.UtcNow;
             dbGroup.GroupTypeId = (int) GroupTypes.Active;
 
             _repository.Update(dbGroup);
             
+            _logService.LogInfo($"Group {groupId} is activated");
+            
             await _repository.SaveContextAsync();
         }
 
         public async Task DeactivateGroupAsync(int groupId)
         {
+            _logService.LogInfo($"Activating group {groupId}");
+            
             var dbGroup = await _repository.GetAll<Group>()
-                .SingleOrDefaultAsync(group => group.GroupId == groupId);
+                .SingleOrDefaultAsync(group => group.GroupId == groupId)
+                          ?? throw new SPCException($"Group with id {groupId} does not exists", 404);
 
             dbGroup.DeactivatedAt = DateTime.UtcNow;
             dbGroup.GroupTypeId = (int) GroupTypes.Former;
             
             _repository.Update(dbGroup);
 
+            _logService.LogInfo($"Group {groupId} activated");
+            
             await _repository.SaveContextAsync();
         }
 
         public async Task DeleteGroupAsync(int groupId)
         {
+            _logService.LogInfo($"Deleting group {groupId}");
+            
             var dbGroup = await _repository.GetAll<Group>()
                               .Include(group => group.Students)
                               .Include(group => group.Subjects)
@@ -173,6 +199,8 @@ namespace BusinessLogic.Services.Impl
             }
 
             _repository.Delete(dbGroup);
+            
+            _logService.LogInfo($"Group {groupId} deleted");
             
             await _repository.SaveContextAsync();
         }

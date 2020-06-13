@@ -81,7 +81,9 @@ namespace BusinessLogic.Services.Impl
 
         public async Task<StudentDto> GetStudentAsync(int studentId)
         {
-            return await _repository.GetAll<Student>()
+            _logService.LogInfo($"Load student with id {studentId}");
+            
+            var dbStudent =  await _repository.GetAll<Student>()
                 .Where(student => student.StudentId == studentId)
                 .Select(student => new StudentDto
                 {
@@ -92,10 +94,16 @@ namespace BusinessLogic.Services.Impl
                 })
                 .SingleOrDefaultAsync()
                 ?? throw new SPCException($"student with id {studentId} does not exists", StatusCodes.Status404NotFound);
+            
+            _logService.LogInfo($"Student with id {studentId} loaded");
+
+            return dbStudent;
         }
 
         public async Task AddStudentAsync(StudentDto studentDto)
         {
+            _logService.LogInfo($"Add student {studentDto.SecondName} {studentDto.Name} for group {studentDto.GroupId}");
+            
             var student = new Student
             {
                 Name = studentDto.Name,
@@ -137,10 +145,14 @@ namespace BusinessLogic.Services.Impl
             }
             
             await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Student {studentDto.SecondName} {studentDto.Name} for group {studentDto.GroupId} added");
         }
 
         public async Task EditStudentAsync(StudentDto studentDto)
         {
+            _logService.LogInfo($"Edit Student {studentDto.Id}, {studentDto.SecondName} {studentDto.Name} for group {studentDto.GroupId}");
+            
             var dbStudent = await _repository.GetAll<Student>()
                 .SingleOrDefaultAsync(student => student.StudentId == studentDto.Id) 
                             ?? throw new SPCException($"student with id {studentDto.Id} does not exists", StatusCodes.Status404NotFound);
@@ -151,10 +163,14 @@ namespace BusinessLogic.Services.Impl
             _repository.Update(dbStudent);
 
             await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Student {studentDto.Id}, {studentDto.SecondName} {studentDto.Name} for group {studentDto.GroupId} edited");
         }
 
         public async Task RemoveStudentAsync(int studentId)
         {
+            _logService.LogInfo($"Remove student {studentId}");
+            
             var dbStudent = await _repository.GetAll<Student>()
                 .SingleOrDefaultAsync(student => student.StudentId == studentId) 
                             ?? throw new SPCException($"student with id {studentId} does not exists", StatusCodes.Status404NotFound);
@@ -162,6 +178,8 @@ namespace BusinessLogic.Services.Impl
             _repository.Delete(dbStudent);
 
             await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Student {studentId} removed");
         }
 
         #endregion

@@ -35,6 +35,8 @@ namespace BusinessLogic.Services.Impl
         
         public async Task EditPerformanceAsync(StudentPerformanceDto studentPerformanceDto)
         {
+            _logService.LogInfo($"Edit performance info for student {studentPerformanceDto.StudentId}, {studentPerformanceDto.StudentSecondName} {studentPerformanceDto.StudentName}");
+            
             var studentPerformance = await _repository.GetAll<StudentPerformance>()
                                          .Where(performance =>
                                              performance.StudentId == studentPerformanceDto.StudentId &&
@@ -62,12 +64,16 @@ namespace BusinessLogic.Services.Impl
                     _repository.Update(dbHomework);
                 }
             }
+            
+            _logService.LogInfo($"Performance info for student {studentPerformanceDto.StudentId}, {studentPerformanceDto.StudentSecondName} {studentPerformanceDto.StudentName} edited");
 
             await _repository.SaveContextAsync();
         }
 
         public async Task<StudentPerformanceDto> GetStudentPerformanceAsync(int studentId, int subjectId)
         {
+            _logService.LogInfo($"Load performance info for student {studentId}, subject {subjectId}");
+
             var studentPerformances = await _repository.GetAll<Subject>()
                 .Where(subject => subject.SubjectId == subjectId)
                 .Select(subject => subject.StudentPerformances
@@ -97,6 +103,8 @@ namespace BusinessLogic.Services.Impl
                                      throw new SPCException($"Student {studentId} don't have results for subject {subjectId}", 404);
 
             await AssignValueToHomeworksAsync(studentPerformance);
+            
+            _logService.LogInfo($"Performance info for student {studentId}, subject {subjectId} loaded");
             
             return studentPerformance;
         }

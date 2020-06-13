@@ -103,7 +103,9 @@ namespace BusinessLogic.Services.Impl
 
         public async Task<SubjectTestDto> GetSubjectAsync(int subjectId)
         {
-            return await _repository.GetAll<Subject>()
+            _logService.LogInfo($"Start loading subject test sum with subject id {subjectId}");
+            
+            var dbSubject = await _repository.GetAll<Subject>()
                        .Where(subject => subject.SubjectId == subjectId)
                        .Select(subject => new SubjectTestDto 
                        {
@@ -124,10 +126,16 @@ namespace BusinessLogic.Services.Impl
                        })
                        .SingleOrDefaultAsync()
                    ?? throw new SPCException($"Subject with id {subjectId} does not exists in database", 404);
+            
+            _logService.LogInfo($"Subject test sum with subject id {subjectId} loaded");
+            
+            return dbSubject;
         }
 
         public async Task CreateSubjectAsync(SubjectDto subjectDto)
         {
+            _logService.LogInfo($"Start adding subject  {subjectDto.SubjectName} for group {subjectDto.GroupId} ({subjectDto.GroupName})");
+            
             var subject = new Subject
             {
                 GroupId = subjectDto.GroupId,
@@ -160,10 +168,14 @@ namespace BusinessLogic.Services.Impl
             }
 
             await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Subject  {subjectDto.SubjectName} added for group {subjectDto.GroupId} ({subjectDto.GroupName})");
         }
 
         public async Task EditSubjectAsync(SubjectDto subjectDto)
         {
+            _logService.LogInfo($"Start edit subject  {subjectDto.Id} for group {subjectDto.GroupId} ({subjectDto.GroupName})");
+            
             var dbSubject = await _repository.GetAll<Subject>()
                 .SingleOrDefaultAsync(subject => subject.SubjectId == subjectDto.Id);
             
@@ -174,11 +186,15 @@ namespace BusinessLogic.Services.Impl
             _repository.Update(dbSubject);
             
             await _repository.SaveContextAsync();
+            
+            _logService.LogInfo($"Subject  {subjectDto.Id} for group {subjectDto.GroupId} ({subjectDto.GroupName}) edited");
         }
 
         
         public async Task RemoveSubjectAsync(int subjectId)
         {
+            _logService.LogInfo($"Start removing subject with id {subjectId}");
+            
             var dbSubject = await _repository.GetAll<Subject>()
                 .SingleOrDefaultAsync(subject => subject.SubjectId == subjectId);
 
@@ -186,6 +202,7 @@ namespace BusinessLogic.Services.Impl
 
             await _repository.SaveContextAsync();
 
+            _logService.LogInfo($"Subject with id {subjectId} removed");
         }
 
         #endregion
