@@ -10,7 +10,7 @@
     @foreach (var performance in @Model.Subjects)
     {
         <div class="col-md-3">
-            <h6>@performance.SubjectTitle</h6>
+            <h6>@performance.SubjectTitle</h6> <a asp-controller="Subject" asp-action="Details" asp-route-id="@performance.SubjectId">Go to subject</a>
             <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -40,11 +40,10 @@
                 }
                 </tbody>
             </table>
-            <a asp-controller="Subject" asp-action="Details" asp-route-id="@performance.SubjectId" class="btn btn-sm btn-primary">Go to subject</a>
         </div>
     }
 </div>
 
-<div class="m-3">
+<div>
     <a href="##" onClick="history.go(-1); return false;" class="btn btn-danger btn-sm"> Back</a>
 </div>
