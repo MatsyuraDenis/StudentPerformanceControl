@@ -31,7 +31,7 @@
                         @for (var i = 0; i < Model.EditableHomeworks.Count(); i++)
                         {
                             <div class="form-group">
-                                <label asp-for="EditableHomeworks[i].Points" class="control-label">Homework№ @Model.EditableHomeworks[i].HomeworkNumber (Max: @Model.EditableHomeworks[i].MaxPointsw)</label>
+                                <label asp-for="EditableHomeworks[i].Points" class="control-label">Homework№ @Model.EditableHomeworks[i].HomeworkNumber (Max: @Model.EditableHomeworks[i].MaxPoints)</label>
                                 <input asp-for="EditableHomeworks[i].Points" class="form-control" />
                                 <span asp-validation-for="EditableHomeworks[i].Points"></span>
                             </div>
