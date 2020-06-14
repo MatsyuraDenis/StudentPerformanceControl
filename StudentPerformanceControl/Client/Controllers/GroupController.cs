@@ -16,7 +16,7 @@ namespace Client.Controllers
 {
     public class GroupController : Controller
     {
-        #region MyRegion
+        #region Dependencies
 
         private readonly IGroupService _groupService;
         private readonly ISubjectInfoService _subjectInfoService;
