@@ -6,6 +6,26 @@
     var index = 1;
 }
 
+@if (Model.FirstOrDefault() != null)
+{
+    @if (Model.First().Type == (int) GroupTypes.Active)
+    {
+        <h3> Active groups </h3>
+    }
+    else if(Model.First().Type == (int) GroupTypes.Created)
+    {
+        <h3> Groups in create mod </h3>
+    }
+    else if (Model.First().Type == (int) GroupTypes.Former)
+    {
+        <h3> Former groups </h3>
+    }
+    else
+    {
+        <h3> Groups </h3>
+    }
+}
+
 <div class="container">
     <table class="table table-striped">
         <thead class="thead-dark">
