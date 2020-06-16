@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Client.Controllers.API
 {
     [Route("api/group")]
-    public class GroupController : ErrorController
+    public class ApiGroupController : ErrorController
     {
         #region Dependencies
 
@@ -18,7 +18,7 @@ namespace Client.Controllers.API
 
         #region ctor
 
-        public GroupController(IGroupService groupService, ISubjectInfoService subjectInfoService)
+        public ApiGroupController(IGroupService groupService, ISubjectInfoService subjectInfoService)
         {
             _groupService = groupService;
             _subjectInfoService = subjectInfoService;

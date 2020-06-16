@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Client.Controllers.API
 {
     [Microsoft.AspNetCore.Components.Route("api/student")]
-    public class StudentController : ErrorController
+    public class ApiStudentController : ErrorController
     {
         #region Dependencies
 
@@ -19,7 +19,7 @@ namespace Client.Controllers.API
 
         #region ctor
 
-        public StudentController(IStudentService studentService, IPerformanceService performanceService)
+        public ApiStudentController(IStudentService studentService, IPerformanceService performanceService)
         {
             _studentService = studentService;
             _performanceService = performanceService;

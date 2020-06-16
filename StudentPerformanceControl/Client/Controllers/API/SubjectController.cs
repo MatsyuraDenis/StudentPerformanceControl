@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Client.Controllers.API
 {
     [Route("api/subject")]
-    public class SubjectController : ErrorController
+    public class ApiSubjectController : ErrorController
     {
         #region MyRegion
                   
@@ -23,7 +23,7 @@ namespace Client.Controllers.API
                   
         #region ctor
                   
-        public SubjectController(ISubjectService subjectService, IPerformanceService performanceService, ISubjectInfoService subjectInfoService)
+        public ApiSubjectController(ISubjectService subjectService, IPerformanceService performanceService, ISubjectInfoService subjectInfoService)
         { 
             _subjectService = subjectService;
             _performanceService = performanceService;

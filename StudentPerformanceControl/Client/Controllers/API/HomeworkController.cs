@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Client.Controllers.API
 {
     [Route("api/homework")]
-    public class HomeworkController : ErrorController
+    public class ApiHomeworkController : ErrorController
     {
         #region Dependencies
 
@@ -16,7 +16,7 @@ namespace Client.Controllers.API
 
         #region ctor
 
-        public HomeworkController(IHomeworkService homeworkService)
+        public ApiHomeworkController(IHomeworkService homeworkService)
         {
             _homeworkService = homeworkService;
         }

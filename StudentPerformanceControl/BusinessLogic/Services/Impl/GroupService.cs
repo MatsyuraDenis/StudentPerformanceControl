@@ -188,6 +188,12 @@ namespace BusinessLogic.Services.Impl
                               .SingleOrDefaultAsync(group => group.GroupId == groupId)
                           ?? throw new SPCException($"Group with id {groupId} does not exists", 404);
 
+            if (dbGroup.GroupTypeId != (int) GroupTypes.Created)
+            {
+                _logService.LogError("Try to remove non-active group");
+                throw new SPCException("You can delet only active group!", 400);
+            }
+            
             foreach (var student in dbGroup.Students)
             {
                 _repository.Delete(student);
