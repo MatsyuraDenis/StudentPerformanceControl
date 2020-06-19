@@ -4,6 +4,8 @@
     ViewData["Title"] = "Index";
 }
 
+<h3>@Model.Name</h3>
+
 @if (Model.GroupType == (int) GroupTypes.Created)
 {
     <a asp-controller="Homework" asp-action="Create" asp-route-subjectId="@Model.SubjectId" class="btn btn-sm btn-primary">Add homework</a>

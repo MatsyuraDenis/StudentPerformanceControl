@@ -48,6 +48,7 @@ namespace BusinessLogic.Services.Impl
                 {
                     SubjectId = subject.SubjectId,
                     GroupType = subject.Group.GroupTypeId,
+                    Name = subject.SubjectInfo.Title,
                     Subject = new SubjectDto
                     {
                         Id = subject.SubjectId,

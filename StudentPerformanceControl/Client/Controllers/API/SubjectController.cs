@@ -1,12 +1,8 @@
-using System;
 using System.Threading.Tasks;
 using BusinessLogic.Services;
-using DataCore.Exceptions;
-using Entity.Models.Dtos;
 using Entity.Models.Dtos.PerformanceInfos;
 using Entity.Models.Dtos.Subject;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Client.Controllers.API
 {
